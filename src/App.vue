@@ -1,55 +1,24 @@
 <template>
   <div id="app">
-   {{msg}}
-   <ul>
-     <li>
-    <router-link to="/home">主页</router-link>
-    <router-link to="/news">新闻</router-link>
-     </li>
-   </ul>
-   <div>
-     <router-view></router-view>
-   </div>
+    <router-view></router-view>
   </div>
 </template>
-
-<script>
-export default {
-  name: "app",
-  data() {
-    return {
-      msg: "Welcome to Your Vue.js App"
-    };
-  }
-};
-</script>
-
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-  border:1px solid #666;
+/* 初始化样式 */
+html,body{height:100%; width:100%; overflow:hidden; margin:0;
+padding:0;}
+#app{
+width:100%; height:100%; overflow:hidden; margin:0;
+padding:0;
 }
-h1,
-h2 {
-  font-weight: normal;
+#layout,#mainBox{
+  width:100%; height:100%;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
+.el-container{
+  align-content: stretch;
+}
+.el-container.is-vertical{
+  width:100%; height:100%;
 }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
