@@ -1,6 +1,9 @@
 var path = require('path')
 var webpack = require('webpack')
-
+var proxy = require('http-proxy-middleware');
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -16,9 +19,10 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
+        exclude: /node_modules/,
         options: {
           loaders: {
           }
@@ -31,7 +35,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        test: /\.(png|jpg|gif)$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]'
@@ -52,7 +56,18 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    stats: { colors: true },
+    proxy: [
+      {
+        context: ['/login', '/register', '/user/navlist', '/user/outfit', '/user/build', '/user/created', 
+        '/user/getframelist','/user/setauthority','/user/upmission', '/captcha', '/checkname', '/getgroup',
+        '/setgroup', '/getgrouptree'],
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        secure: false
+      }
+    ]
   },
   performance: {
     hints: false

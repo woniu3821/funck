@@ -1,0 +1,270 @@
+<template>
+<div>
+  <Index></Index>
+<el-form :model="buildForm" :rules="rules" ref="buildForm" label-width="100px" class="demo-buildForm">
+<el-row>
+  <el-col :lg="16" :xl="12">
+    <el-form-item label="任务名称:" prop="name">
+      <el-input v-model="buildForm.name"></el-input>
+    </el-form-item>
+      <el-row :gutter="20">
+    <el-form-item label="截止日期">
+        <el-col :md="16" :lg="14" :xl="16">
+          <el-form-item prop="date1">
+            <el-date-picker type="date" placeholder="选择日期" v-model="buildForm.date1" style="width: 100%;"></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :md="8" :lg="10" :xl="8">
+          <el-form-item prop="date2">
+          <el-time-select 
+            style="width:100%"
+            v-model="buildForm.date2"
+            :picker-options="{
+              start: '08:30',
+              step: '00:30',
+              end: '17:30'
+            }"
+            placeholder="选择时间">
+          </el-time-select>
+          </el-form-item>
+          </el-col>
+    </el-form-item>
+      </el-row>
+    <el-form-item label="执行人">
+        <el-input
+          placeholder="试试搜索网络部"
+          v-model="filterText">
+        </el-input>
+    </el-form-item>
+    <el-form-item prop="peoples">
+        <el-tree
+          class="filter-tree"
+          :data="options"
+          :props="defaultProps"
+          node-key="id"
+          show-checkbox
+          :indent=20
+          :filter-node-method="filterNode"
+          @check-change="getCheckedKeys"
+          ref="tree">
+        </el-tree>
+    </el-form-item>
+    <el-form-item label="任务详情" prop="desc">
+      <el-input type="textarea" v-model="buildForm.desc"></el-input>
+    </el-form-item>
+    <el-form-item label="上传附件">
+      <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="3"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+        ref="tree2"
+        >
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="success" @click="submitForm('buildForm')">立即创建</el-button>
+      <el-button @click="resetForm('buildForm')">取消</el-button>
+    </el-form-item>
+  </el-col>
+</el-row>
+</el-form>
+</div>
+</template>
+<style scoped>
+#usually {
+  text-align: left;
+}
+.transfer-footer {
+  margin-left: 20px;
+  padding: 6px 5px;
+}
+.tranform {
+  text-align: left;
+}
+.upload-demo {
+  text-align: left;
+}
+.line {
+  text-align: center;
+}
+</style>
+<script>
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import Index from "./index"
+export default {
+  components: {
+   Index
+  },
+  data() {
+    return {
+      buildForm: {
+        name: "",
+        date1: "",
+        date2: "",
+        peoples: [],
+        desc: "",
+        id: ""
+      },
+      filterText: "",
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
+      options: [],
+      rules: {
+        name: [
+          { required: true, message: "请输入任务名称", trigger: "blur" },
+          { min: 3, max: 50, message: "长度在 3 到 50 个字符", trigger: "blur" }
+        ],
+        date1: [
+          {
+            type: "date",
+            required: true,
+            message: "请选择日期",
+            trigger: "change"
+          }
+        ],
+        date2: [
+          {
+            required: true,
+            message: "请选择时间",
+            trigger: "change"
+          }
+        ],
+        peoples: [
+          {
+            type: "array",
+            required: true,
+            message: "请选择执行人",
+            trigger: "blur"
+          }
+        ],
+        desc: [{ required: true, message: "请填写任务详情", trigger: "blur" }]
+      },
+      fileList: [
+        {
+          name: "food.jpeg",
+          url:
+            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+        },
+        {
+          name: "food2.jpeg",
+          url:
+            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+        }
+      ]
+    };
+  },
+  mounted() {
+    this.options = this.getOutfit;
+    let fromData = this.$route.params.dataObj; //路由传参传回修改任务的数据
+    if (fromData) {
+      fromData.date1 = new Date(fromData.date1); //后台传回的参数要处理一下
+      this.buildForm = fromData;
+      this.setCheckedKeys(fromData.peoples);
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let data = {
+            name: this.buildForm.name,
+            times: this.linkData,
+            peoples: this.buildForm.peoples,
+            detail: this.buildForm.desc,
+            id: this.buildForm.id
+          };
+          this.buildSubmit(data)
+            .then(res => {
+              switch (res.type) {
+                case "success":
+                  this.resetForm(formName);
+                  break;
+                default:
+                  break;
+              }
+            })
+            .catch(err => {
+              //TODO 失败尝试重新提交数据
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    getCheckedKeys() {
+      this.buildForm.peoples = this.$refs.tree.getCheckedKeys(true);
+    },
+    setCheckedKeys(peoples) {
+      this.$refs.tree.setCheckedKeys(peoples);
+    },
+    resetChecked() {
+      this.$refs.tree.setCheckedKeys([]);
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    resetForm(formName) {
+      this.resetChecked() //强制将选择的用户重置
+      this.$refs[formName].resetFields();
+    },
+    //文件上传
+    handleChange(value, direction, movedKeys) {
+      console.log(value, direction, movedKeys);
+    },
+    handleRemove(file, fileList) {
+      // console.log(file, fileList);
+    },
+    handlePreview(file) {
+      // console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    ...mapActions({
+      buildSubmit: "buildSubmit"
+    })
+  },
+  computed: {
+    linkData() {
+      let date = this.buildForm.date1;
+      let time = this.buildForm.date2.split(":");
+      if (date && time) {
+        let year = new Date(date).getFullYear();
+        let month = new Date(date).getMonth();
+        let day = new Date(date).getDate();
+        let hours = time[0];
+        let minutes = time[1];
+        let seconds = 0;
+        let times = new Date(year, month, day, hours, minutes, seconds);
+        return times;
+      }
+    },
+    ...mapGetters(["getOutfit"])
+  }
+};
+</script>
