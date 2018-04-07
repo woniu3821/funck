@@ -119,9 +119,7 @@ export default {
       form: {
         peoples: [],
         frames: [],
-        permission: [],
-        orders: [],
-        fid:[]
+        subdata:{}
       },
       loading: false,
       defaultSort: { prop: "orders", order: "ascending" },
@@ -171,9 +169,7 @@ export default {
             this.form.frames.push(fid);
           }
           for (let {fid, permission,orders } of this.$refs.singleTable.tableData) {
-            this.form.permission.push(permission);
-            this.form.orders.push(orders);
-            this.form.fid.push(fid);
+            this.form.subdata[fid]={permission:permission,order:orders};
           }
           this.loading = true;
           this.setAuthority(this.form).then(_ => {
@@ -187,10 +183,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs.tree.setCheckedKeys([]); //重置树选项
-      // this.form.peoples=[];
-      this.form.fid=[],
-      this.form.permission=[];
-      this.form.orders=[];
+      this.form.subdata={},
       this.form.frames=[];
       this.frames=[];
       this.setFrameworke().then(res => {
@@ -206,10 +199,11 @@ export default {
           this.setFrameworke(this.form.peoples[0]).then(res => {
             this.$refs.singleTable.clearSelection();
             if (Array.isArray(res) && res.length) {
-              for (let { order, permission, fid } of res) {
+              for (let { orders, permission, fid } of res) {
                 this.permission2[fid] = permission.split(",");
-                this.orders2[fid] = order;
+                this.orders2[fid] = orders;
               }
+              console.log(this.permission2)
               this.tableParse(
                 this.$refs.singleTable.tableData,
                 this.orders2,
