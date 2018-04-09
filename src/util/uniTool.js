@@ -1,3 +1,4 @@
+import Vue from 'vue'
 export const creatChild = (data, ispath, _this) => {
     for (let { child } of data) {
         if (child && child.length) {
@@ -24,3 +25,5 @@ export const hasPermission = {
         })
     }
 }
+
+export const bus=new Vue()
