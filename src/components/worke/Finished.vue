@@ -4,7 +4,7 @@
   <el-table class="finished_table"
     :data="tableData2"
     style="width: 100%"
-    :row-class-name="tableRowClassName">
+  >
     <el-table-column
       prop="date"
       label="任务ID"
@@ -52,14 +52,7 @@
    Index
   },
     methods: {
-      tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }
-        return '';
-      }
+
     },
     data() {
       return {

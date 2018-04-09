@@ -13,7 +13,7 @@
       width="150">
     </el-table-column>
     <el-table-column
-      prop="name"
+      prop="title"
       label="任务名称"
       width="200">
     </el-table-column>
@@ -78,7 +78,7 @@
       label="动态"
       >
       <template slot-scope="scope">
-          <el-tag type="success" size="medium">{{ scope.row.name }}</el-tag>
+          <el-tag type="success" size="medium">{{ scope.row.title }}</el-tag>
           <el-tag type="info" size="medium">接收任务了任务{{scope.row.date}}</el-tag>
       </template>
     </el-table-column>
@@ -120,32 +120,32 @@ export default {
       tableData: [
         {
           date: "2016-05-02",
-          name: "王小虎",
+          title: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄"
         },
         {
           date: "2016-05-04",
-          name: "王小虎",
+          title: "王小虎",
           address: "上海市普陀区金沙江路 1517 弄"
         },
         {
           date: "2016-05-01",
-          name: "王小虎",
+          title: "王小虎",
           address: "上海市普陀区金沙江路 1519 弄"
         },
         {
           date: "2016-05-10",
-          name: "王小虎",
+          title: "王小虎",
           address: "上海市普陀区金沙江路 1516 弄"
         },
         {
           date: "2016-05-10",
-          name: "王小虎",
+          title: "王小虎",
           address: "上海市普陀区金沙江路 1516 弄"
         },
         {
           date: "2016-05-10",
-          name: "王小虎",
+          title: "王小虎",
           address: "上海市普陀区金沙江路 1516 弄"
         }
       ]

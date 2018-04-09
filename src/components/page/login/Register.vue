@@ -160,7 +160,6 @@ export default {
     this.getGroup()
       .then(res => {
         this.groups=res;
-        console.log(res)
       })
       .catch(err => {
         console.log(err)

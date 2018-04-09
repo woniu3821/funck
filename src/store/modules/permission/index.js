@@ -6,11 +6,11 @@ const state = {
     mode: 'login',
     // 完整权限列表（菜单列表）
     list: [],
-    outfit:{},
+    outfit: {},
 }
 
 const getters = {
-    getList:(state)=>{
+    getList: (state) => {
         return state.list;
     }
 }
@@ -22,15 +22,15 @@ const mutations = {
     setList: (state, data) => {
         state.list = data
     },
-    setOutfit:(state,data)=>{
-        state.outfit=data
+    setOutfit: (state, data) => {
+        state.outfit = data
     }
 }
 
 const actions = {
     // 获取权限列表
-    getPermission({commit, rootState}){
-        return new Promise((resolve, reject) =>{
+    getPermission({ commit, rootState }) {
+        return new Promise((resolve, reject) => {
             let uid = userStore.state.uid
             axios({
                 url: '/user/navlist',
@@ -40,7 +40,7 @@ const actions = {
                 }
             }).then((res) => {
                 // 存储权限列表
-                    commit('setList', res.data)
+                commit('setList', res.data)
                 resolve(res.data)
             }).catch(() => {
                 reject()

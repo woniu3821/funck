@@ -1,5 +1,5 @@
 <template>
-<el-menu :default-active="$route.path" class="el-menu-demo" router mode="horizontal" @select="creatSelect">
+<el-menu :default-active="$route.path" class="el-menu-demo" router mode="horizontal">
   <el-menu-item v-for="(subItem,index) in childData" :index="subItem.path" :key="index"><el-badge :value="30" :max="99" class="item">
   {{subItem.name}}
 </el-badge></el-menu-item>
@@ -15,9 +15,7 @@ export default {
     };
   },
   methods: {
-    creatSelect(tab, event) {
-      console.log(tab, event);
-    }
+
   },
   created() {
     creatChild(this.navList, this.$route.path, this);

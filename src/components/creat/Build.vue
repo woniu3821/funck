@@ -4,8 +4,8 @@
 <el-form :model="buildForm" :rules="rules" ref="buildForm" label-width="100px" class="demo-buildForm">
 <el-row>
   <el-col :lg="16" :xl="12">
-    <el-form-item label="任务名称:" prop="name">
-      <el-input v-model="buildForm.name"></el-input>
+    <el-form-item label="任务名称:" prop="title">
+      <el-input v-model="buildForm.title"></el-input>
     </el-form-item>
       <el-row :gutter="20">
     <el-form-item label="截止日期">
@@ -106,7 +106,7 @@ export default {
   data() {
     return {
       buildForm: {
-        name: "",
+        title: "",
         date1: "",
         date2: "",
         peoples: [],
@@ -120,7 +120,7 @@ export default {
       },
       options: [],
       rules: {
-        name: [
+        title: [
           { required: true, message: "请输入任务名称", trigger: "blur" },
           { min: 3, max: 50, message: "长度在 3 到 50 个字符", trigger: "blur" }
         ],
@@ -182,7 +182,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let data = {
-            name: this.buildForm.name,
+            title: this.buildForm.title,
             times: this.linkData,
             peoples: this.buildForm.peoples,
             detail: this.buildForm.desc,

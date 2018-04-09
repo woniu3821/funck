@@ -81,8 +81,8 @@
       </el-col>
     </el-row>
     <el-row type="flex" justify="center" class="button_bottom">
-          <el-button type="info"  @click="resetForm('form')">重置</el-button>
-          <el-button type="primary" @click="onSubmit('form')" :loading="loading">提交修改</el-button>
+      <el-button type="info"  @click="resetForm('form')">重置</el-button>
+      <el-button type="primary" @click="onSubmit('form')" :loading="loading">提交设置</el-button>
     </el-row>
 </el-form>
 </div>
@@ -203,7 +203,6 @@ export default {
                 this.permission2[fid] = permission.split(",");
                 this.orders2[fid] = orders;
               }
-              console.log(this.permission2)
               this.tableParse(
                 this.$refs.singleTable.tableData,
                 this.orders2,

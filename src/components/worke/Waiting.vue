@@ -7,14 +7,14 @@
     style="width: 100%">
     <el-table-column
       fixed
-      prop="date"
+      prop="missionid"
       label="任务ID"
-      width="150">
+      width="80">
     </el-table-column>
     <el-table-column
-      prop="name"
+      prop="title"
       label="任务名称"
-      width="200">
+      width="250">
     </el-table-column>
     <el-table-column
       prop="province"
@@ -22,29 +22,29 @@
       width="80">
     </el-table-column>
     <el-table-column
-      prop="city"
+      prop="peoples"
       label="执行人"
-      width="80">
+      width="200">
     </el-table-column>
     <el-table-column
-      prop="address"
+      prop="detail"
       label="任务简介"
-      width="300">
+      width="500">
     </el-table-column>
     <el-table-column
-      prop="zip"
+      prop="timebegain"
       label="发起时间"
-      width="120">
+      width="150">
     </el-table-column>
     <el-table-column
-      prop="zip"
+      prop="timeend"
       label="截止时间"
-      width="120">
+      width="150">
     </el-table-column>
     <el-table-column
       fixed="right"
       label="操作"
-      width="200">
+      width="180">
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="primary" size="small">接受</el-button>
         <el-button type="success" :loading="true" size="small">查看</el-button>
@@ -59,53 +59,28 @@
 }
 </style>
 <script>
+import { mapActions, mapGetters } from "vuex";
 import Index from "./index";
 export default {
   components: {
     Index
   },
+    data() {
+    return {
+      tableData: []
+    };
+  },
   methods: {
     handleClick(row) {
       console.log(row);
-    }
+    },
+    ...mapActions(['getWating'])
   },
-  data() {
-    return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        }
-      ]
-    };
+  mounted(){
+    this.getWating().then(res=>{
+      this.tableData=res.data;
+      console.log(res.data)
+    })
   }
 };
 </script>
