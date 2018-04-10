@@ -3,7 +3,7 @@
   <Index></Index>
     <el-table 
       :data="tableData"
-      border
+      @cell-click="hasComplate"
      >
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -114,6 +114,9 @@ export default {
     sendCount() {
       this.countObj[this.$route.path] = this.tableData.length;
       bus.$emit("getCount", this.countObj);
+    },
+    hasComplate(row, column, cell, event){
+    
     },
     ...mapActions(["getWorking"])
   },
