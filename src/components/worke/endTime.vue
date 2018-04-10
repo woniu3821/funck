@@ -1,5 +1,5 @@
 <template>
-    <span :class="{active:isActive}" :endTime="endTime" :callback="callback" :endText="endText">
+    <span :class="{active:isActive}">
         <slot>
             {{content}}
         </slot>
@@ -7,7 +7,7 @@
 </template>
 <style scoped>
 .active {
-  color: #ff6347!important;
+  color: #ff6347 !important;
 }
 </style>
 
@@ -20,17 +20,10 @@ export default {
     };
   },
   props: {
-    endTime: {
-      type: Number,
-      default: null
-    },
+    endTime: Number,
     endText: {
       type: String,
       default: "已结束"
-    },
-    callback: {
-      type: Function,
-      default: null
     }
   },
   mounted() {
@@ -66,15 +59,10 @@ export default {
           clearInterval(timer);
           self.isActive = true;
           self.content = self.endText;
-          self._callback();
+          self.$emit('timeStop')
         }
       }, 1000);
     },
-    _callback() {
-      if (this.callback && this.callback instanceof Function) {
-        this.callback(...this);
-      }
-    }
   }
 };
 </script>

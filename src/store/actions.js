@@ -125,7 +125,9 @@ const actions = {
                 }
             }).then((res) => {
                 if (res.status == 200) {
-                    commit(types.INFOMSG, res.data)
+                    if (res.data.success) {
+                        commit(types.INFOMSG, res.data)
+                    }
                     resolve(res.data)
                 } else {
                     reject(err)
@@ -148,7 +150,9 @@ const actions = {
                 }
             }).then((res) => {
                 if (res.status == 200) {
-                    commit(types.INFOMSG, res.data)
+                    if (res.data.success) {
+                        commit(types.INFOMSG, res.data)
+                    }
                     resolve(res.data)
                 } else {
                     reject(err)

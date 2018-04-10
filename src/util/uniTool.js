@@ -9,7 +9,6 @@ export const creatChild = (data, ispath, _this) => {
                 _this.childData = child;
                 return;
             }
-
         }
     }
 }

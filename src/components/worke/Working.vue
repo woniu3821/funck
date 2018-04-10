@@ -3,6 +3,7 @@
   <Index></Index>
     <el-table 
       :data="tableData"
+      border
      >
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -18,7 +19,7 @@
                 </el-col>
               <el-col :span="8">
                 <el-form-item label="剩余时间">
-                <endTime class="timeend" :endTime="props.row.timeend" :callback="timeend(props.row.timeend)" endText="已经结束了"></endTime>
+                 <endTime class="timeend" :endTime="props.row.timeend" v-on:timeStop="endFun(props.row)" endText="已经结束了"></endTime>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -54,6 +55,15 @@
         :formatter="endFormat"
         >
       </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="180">
+        <template slot-scope="scope">
+          <el-button  type="primary" size="small">完成</el-button>
+          <el-button  type="danger" size="small">提交审核</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 </div>
 </template>
@@ -62,7 +72,7 @@
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 90px;
+  width: 80px;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
@@ -92,8 +102,8 @@ export default {
     };
   },
   methods: {
-    timeend() {
-      console.log("任务结束了");
+    endFun(row) {
+      console.log(row.missionid);
     },
     endFormat(row, column) {
       return timeParse(row.timeend);
@@ -107,10 +117,9 @@ export default {
     },
     ...mapActions(["getWorking"])
   },
-    mounted() {
+  mounted() {
     this.getWorking().then(res => {
       this.tableData = res.data;
-      console.log(this.tableData)
       this.sendCount();
     });
   }
