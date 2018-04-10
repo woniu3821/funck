@@ -56,10 +56,9 @@
     <el-table-column
       fixed="right"
       label="操作"
-      width="200">
+      width="100">
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="primary" size="small">接受</el-button>
-        <el-button type="success" :loading="true" size="small">查看</el-button>
+        <el-button  @click.native.prevent="handleClick(scope.row,scope.$index,tableData)" :loading="loading" type="success" size="small">接受</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -78,7 +77,7 @@
 </style>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { bus } from "../../util/uniTool";
+import { bus,timeParse } from "../../util/uniTool";
 import Index from "./index";
 export default {
   components: {
@@ -86,34 +85,28 @@ export default {
   },
   data() {
     return {
-      tableData: []
+      tableData: [],
+      countObj: {},
+      loading:false,
     };
   },
   methods: {
-    handleClick(row) {
-      // console.log(row);
+    handleClick(row,index,tabledata) {
+      this.loading=true;
+      this.getWating(row.missionid).then(res => {
+        tabledata.splice(index,1)
+        this.loading=false;
+      });
     },
     endFormat(row, column) {
-      return this.timestampToTime(row.timeend);
+      return timeParse(row.timeend);
     },
     begainFormat(row, column) {
-      return this.timestampToTime(row.timebegain);
-    },
-    timestampToTime(timestamp) {
-      let date = new Date(timestamp * 1000);
-      let Y = date.getFullYear() + "/";
-      let M =
-        (date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1) + "/";
-      let D = date.getDate() + " ";
-      let h = date.getHours() + ":";
-      let m = date.getMinutes();
-      // s = date.getSeconds();
-      return Y + M + D + h + m;
+      return timeParse(row.timebegain);
     },
     sendCount() {
-      bus.$emit("getCount", {0:this.tableData.length}); 
+      this.countObj[this.$route.path] = this.tableData.length;
+      bus.$emit("getCount", this.countObj);
     },
     ...mapActions(["getWating"])
   },

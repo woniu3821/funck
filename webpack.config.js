@@ -63,7 +63,7 @@ module.exports = {
       {
         context: ['/login', '/register', '/user/navlist', '/user/outfit', '/user/build', '/user/created', 
         '/user/getframelist','/user/setauthority','/user/upmission', '/captcha', '/checkname', '/getgroup',
-          '/setgroup', '/getgrouptree','/getwating'],
+          '/setgroup', '/getgrouptree', '/getwating','/getworking'],
         target: "http://localhost:3000",
         changeOrigin: true,
         secure: false

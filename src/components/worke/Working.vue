@@ -2,48 +2,57 @@
 <div id="working">
   <Index></Index>
     <el-table 
-      :data="tableData5"
-      style="width:100%">
+      :data="tableData"
+     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="任务名称">
-              <span>{{ props.row.name }}</span>
-            </el-form-item>
-            <el-form-item label="发起人">
-              <span>{{ props.row.shop }}</span>
-            </el-form-item>
-            <el-form-item label="起止时间">
-              <span>{{ props.row.id }}</span>
-            </el-form-item>
-            <el-form-item label="剩余时间">
-              <span>
-                {{ props.row.shopId }}
-              </span>
-            </el-form-item>
-            <el-form-item label="执行人">
-              <span>{{ props.row.category }}</span>
-            </el-form-item>
-            <el-form-item label="监督人">
-              <span>{{ props.row.address }}</span>
-            </el-form-item>
-            <el-form-item label="任务详情">
-              <span>{{ props.row.desc }}</span>
-            </el-form-item>
+          <el-form label-position="left" class="demo-table-expand">
+            <el-row>
+              <el-col :span="16">
+                  <el-form-item label="发起人">
+                    <span>{{ props.row.name }}</span>
+                  </el-form-item>
+                  <el-form-item label="执行人">
+                    <span>{{ props.row.peoples }}</span>
+                  </el-form-item>
+                </el-col>
+              <el-col :span="8">
+                <el-form-item label="剩余时间">
+                <endTime class="timeend" :endTime="props.row.timeend" :callback="timeend(props.row.timeend)" endText="已经结束了"></endTime>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-form-item label="任务详情">
+                <el-col>
+                <span>{{ props.row.detail }}</span>
+                </el-col>
+              </el-form-item>
+            </el-row>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column
         label="任务ID"
-        prop="id">
+        width="80"
+        prop="missionid">
       </el-table-column>
       <el-table-column
         label="任务名称"
-        prop="name">
+        prop="title">
       </el-table-column>
       <el-table-column
-        label="起止时间"
-        prop="desc">
+        label="开始时间"
+         width="140"
+        :formatter="begainFormat"
+        prop="timebegain">
+      </el-table-column>
+      <el-table-column
+        label="截止时间"
+         width="140"
+        prop="timeend"
+        :formatter="endFormat"
+        >
       </el-table-column>
     </el-table>
 </div>
@@ -59,58 +68,51 @@
 .demo-table-expand .el-form-item {
   margin-right: 0;
   margin-bottom: 0;
-  width: 50%;
+}
+.timeend {
+  font-size: 20px;
+  color: yellowgreen;
 }
 </style>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { bus, timeParse } from "../../util/uniTool";
 import Index from "./index";
+import endTime from "./endTime";
 export default {
   components: {
-    Index
+    Index,
+    endTime
   },
   data() {
     return {
-      tableData5: [
-        {
-          id: "12987122",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
-        },
-        {
-          id: "12987123",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
-        },
-        {
-          id: "12987125",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
-        },
-        {
-          id: "12987126",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
-        }
-      ],
-      activeName: "1"
+      tableData: [],
+      countObj: {}
     };
+  },
+  methods: {
+    timeend() {
+      console.log("任务结束了");
+    },
+    endFormat(row, column) {
+      return timeParse(row.timeend);
+    },
+    begainFormat(row, column) {
+      return timeParse(row.timebegain);
+    },
+    sendCount() {
+      this.countObj[this.$route.path] = this.tableData.length;
+      bus.$emit("getCount", this.countObj);
+    },
+    ...mapActions(["getWorking"])
+  },
+    mounted() {
+    this.getWorking().then(res => {
+      this.tableData = res.data;
+      console.log(this.tableData)
+      this.sendCount();
+    });
   }
 };
 </script>

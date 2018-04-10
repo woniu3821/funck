@@ -115,10 +115,6 @@ const actions = {
     },
     getWating({ commit }, id) {//获取未接受任务
         let uid = State.state.uid;
-        let loadingInstance = Loading.service({
-            lock: true,
-            text: '获取任务中,请稍后...',
-        })
         return new Promise((resolve, reject) => {
             axios({
                 url: '/getwating',
@@ -128,8 +124,35 @@ const actions = {
                     id
                 }
             }).then((res) => {
-                res.data.success && loadingInstance.close();
-                resolve(res.data)
+                if (res.status == 200) {
+                    commit(types.INFOMSG, res.data)
+                    resolve(res.data)
+                } else {
+                    reject(err)
+                }
+            }).catch((err) => {
+                reject(err)
+                console.log(err)
+            })
+        })
+    },
+    getWorking({ commit }, id) {//获取未接受任务
+        let uid = State.state.uid;
+        return new Promise((resolve, reject) => {
+            axios({
+                url: '/getworking',
+                method: 'post',
+                data: {
+                    uid,
+                    id
+                }
+            }).then((res) => {
+                if (res.status == 200) {
+                    commit(types.INFOMSG, res.data)
+                    resolve(res.data)
+                } else {
+                    reject(err)
+                }
             }).catch((err) => {
                 reject(err)
                 console.log(err)
