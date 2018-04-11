@@ -163,6 +163,30 @@ const actions = {
             })
         })
     },
+    getProgress({ commit },data) {//获取任务进度
+        let uid = State.state.uid;
+        return new Promise((resolve, reject) => {
+            axios({
+                url: '/getprogress',
+                method: 'post',
+                data: {
+                    ...data
+                }
+            }).then((res) => {
+                if (res.status == 200) {
+                    if (res.data.success) {
+                        commit(types.INFOMSG, res.data)
+                    }
+                    resolve(res.data)
+                } else {
+                    reject(err)
+                }
+            }).catch((err) => {
+                reject(err)
+                console.log(err)
+            })
+        })
+    },
 
 
 

@@ -2,35 +2,35 @@
 <div>
   <Index></Index>
   <el-table class="created_table"
-    :data="getCreated"
-    border
-    max-height="750"
+    :data="getCreated.length?getCreated.slice((currentPage-1)*pagesize,currentPage*pagesize):[]"
+    max-height="700"
     style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" class="demo-table-expand">
+            <el-row>
+                <el-form-item label="执行人">
+                  <span>{{ props.row.peoples }}</span>
+                </el-form-item>
+            </el-row>
+            <el-row>
+              <el-form-item label="任务详情">
+                <el-col>
+                <span>{{ props.row.detail }}</span>
+                </el-col>
+              </el-form-item>
+            </el-row>
+          </el-form>
+        </template>
+      </el-table-column>
     <el-table-column
-      fixed
       prop="ID"
       label="任务ID"
-      width="150">
+      width="80">
     </el-table-column>
     <el-table-column
       prop="title"
-      label="任务名称"
-      width="200">
-    </el-table-column>
-    <!-- <el-table-column
-      prop="province"
-      label="发起人"
-      width="80">
-    </el-table-column> -->
-    <el-table-column
-      prop="peoples"
-      label="执行人"
-      width="250">
-    </el-table-column>
-    <el-table-column
-      prop="detail"
-      label="任务简介"
-      width="500">
+      label="任务名称">
     </el-table-column>
     <el-table-column
       prop="timebegain"
@@ -47,57 +47,61 @@
       label="操作"
       width="200">
       <template slot-scope="scope">
+        <el-button type="success" @click.native.prevent="checkMission(scope.row)" :loading="loading" size="small">进度</el-button>
         <el-button @click="updateMission(scope.row)" size="small">修改</el-button>
-        <el-button type="success" @click="checkMission(scope.row)" size="small">审查</el-button>
       </template>
     </el-table-column>
   </el-table>
+  <el-row type="flex" v-if="getCreated.length>pagesize" justify="center">
+    <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-sizes="[5,10,15,20]"
+      :page-size="pagesize"
+      prev-text="上一页"
+      next-text="下一页"
+      layout="sizes, prev, pager, next"
+      :total="getCreated.length">
+    </el-pagination>
+  </el-row>
   <!-- 弹出框 -->
 <el-dialog
+:lock-scroll="true"
   title="任务进度"
   :visible.sync="dialogVisible"
-  width="45%"
-  :before-close="handleClose">
+   width="45%">
     <el-table
     max-height="350"
-    :data="tableData"
-    :default-sort = "{prop: 'date', order: 'descending'}"
+    :data="tableData2"
+    :default-sort = "{prop: 'complatetime', order: 'descending'}"
     style="width: 100%;text-align:left;">
     <el-table-column
-      label="时间节点"
-      width="180"
-      sortable
-      prop="date"
+      label="执行人"
+      prop="name"
+      width="80"
       >
-      <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
     </el-table-column>
     <el-table-column
-      label="动态"
+      label="接收时间"
+      prop="accepttime"
+      :formatter="acceptFormat"
       >
-      <template slot-scope="scope">
-          <el-tag type="success" size="medium">{{ scope.row.title }}</el-tag>
-          <el-tag type="info" size="medium">接收任务了任务{{scope.row.date}}</el-tag>
-      </template>
     </el-table-column>
-    <el-table-column width="160"  label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          type="success"
-          @click="handleEdit(scope.$index, scope.row)">通过</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">驳回</el-button>
-      </template>
+    <el-table-column
+      label="完成时间"
+      prop="complatetime"
+      :formatter="complateFormat"
+      >
+    </el-table-column>
+    <el-table-column width="160"  label="动态">
+
     </el-table-column>
   </el-table>
   <span slot="footer" class="dialog-footer">
     <el-button @click="deleteMission">取消任务</el-button>
-    <el-button type="primary" @click="doneMission">确认完成</el-button>
+    <el-button @click="doneMission" type="primary">确认完成</el-button>
   </span>
 </el-dialog>
 </div>
@@ -106,9 +110,13 @@
 .created_table {
   text-align: left;
 }
+.el-pagination {
+  margin-top: 25px;
+}
 </style>
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import {timeParse } from "../../util/uniTool";
+import { mapActions, mapGetters } from "vuex";
 import Index from "./index";
 export default {
   components: {
@@ -116,39 +124,11 @@ export default {
   },
   data() {
     return {
+      currentPage: 1,
+      pagesize: 5,
       dialogVisible: false,
-      tableData: [
-        {
-          date: "2016-05-02",
-          title: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          title: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          title: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-10",
-          title: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        },
-        {
-          date: "2016-05-10",
-          title: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        },
-        {
-          date: "2016-05-10",
-          title: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      loading:false,
+      tableData2:[]
     };
   },
   methods: {
@@ -165,32 +145,36 @@ export default {
         })
         .catch(err => {});
     },
-    checkMission(row) {
-      console.log(row.ID);
-      this.dialogVisible = true;
+    acceptFormat(row) {
+      if(row.accepttime){
+      return timeParse(row.accepttime);
+      }else{
+        return "未接收"
+      }
     },
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
+    complateFormat(row) {
+      if(row.complatetime){
+      return timeParse(row.complatetime);
+
+      }else{
+        return "未完成"
+      }
+    },
+    checkMission(row) {
+      this.loading=true;
+      this.getProgress({id:row.ID,peoples:row.peoples}).then(res => {
+        this.loading=false;
+        if (!res.success) {
+          this.tableData2=res.data;
+          this.dialogVisible = true;
+        }
+      });
     },
     deleteMission() {
-      this.$confirm("是否确认删除任务？")
-        .then(_ => {
-          this.dialogVisible = false;
-          done();
-        })
-        .catch(_ => {});
+
     },
     doneMission() {
-      this.$confirm("确认此任务已完成并结束任务？")
-        .then(_ => {
-          this.dialogVisible = false;
-          done();
-        })
-        .catch(_ => {});
+
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -198,7 +182,13 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
     },
-    ...mapActions(["toUpdateMission"])
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+    },
+    handleSizeChange(size) {
+      this.pagesize = size;
+    },
+    ...mapActions(["toUpdateMission", "getProgress"])
   },
   computed: {
     ...mapGetters(["getCreated"])

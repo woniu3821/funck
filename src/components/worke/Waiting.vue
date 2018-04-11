@@ -112,8 +112,10 @@ export default {
   },
   mounted() {
     this.getWating().then(res => {
+      if(res.success){
       this.tableData = res.data;
       this.sendCount();
+      }
     });
   }
 };

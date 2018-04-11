@@ -2,8 +2,10 @@
 <div id="working">
   <Index></Index>
     <el-table 
-      :data="tableData"
+      :data="tableData.length?tableData.slice((currentPage-1)*pagesize,currentPage*pagesize):[]"
       @cell-click="hasComplate"
+      max-height="700"
+      style="width:100%;"
      >
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -65,6 +67,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-row type="flex" v-if="tableData.length>pagesize" justify="center">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[5,10,15,20]"
+        :page-size="pagesize"
+        prev-text="上一页"
+        next-text="下一页"
+        layout="sizes, prev, pager, next"
+        :total="tableData.length">
+      </el-pagination>
+    </el-row>
 </div>
 </template>
 <style>
@@ -83,6 +99,9 @@
   font-size: 20px;
   color: yellowgreen;
 }
+.el-pagination {
+  margin-top: 25px;
+}
 </style>
 
 <script>
@@ -98,7 +117,9 @@ export default {
   data() {
     return {
       tableData: [],
-      countObj: {}
+      countObj: {},
+      currentPage: 1,
+      pagesize: 5
     };
   },
   methods: {
@@ -112,18 +133,29 @@ export default {
       return timeParse(row.timebegain);
     },
     sendCount() {
-      this.countObj[this.$route.path] = this.tableData.length;
-      bus.$emit("getCount", this.countObj);
+        this.countObj[this.$route.path] = this.tableData.length;
+        bus.$emit("getCount", this.countObj);
     },
-    hasComplate(row, column, cell, event){
-    
+    hasComplate(row, column, cell, event) {
+      this.getWorking(row.missionid).then(res => {
+        // this.tableData = res.data;
+        // this.sendCount();
+      });
+    },
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+    },
+    handleSizeChange(size) {
+      this.pagesize = size;
     },
     ...mapActions(["getWorking"])
   },
   mounted() {
     this.getWorking().then(res => {
-      this.tableData = res.data;
-      this.sendCount();
+      if (res.success) {
+        this.tableData = res.data;
+        this.sendCount();
+      }
     });
   }
 };
