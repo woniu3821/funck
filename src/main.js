@@ -4,9 +4,12 @@ import ElementUI from 'element-ui'
 import App from './App.vue'
 import router from './router'
 import 'element-ui/lib/theme-chalk/index.css'
+import './assets/icon/iconfont.css'
 import store from './store'
 import axios from './util/ajax'
-import { hasPermission} from './util/uniTool'
+import {
+  hasPermission
+} from './util/uniTool'
 Vue.use(hasPermission)
 Vue.prototype.$axios = axios;
 

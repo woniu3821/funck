@@ -87,7 +87,7 @@
     </el-col>
     <el-col  :lg="15" :xl="19">
       <el-col class="title">组织结构图</el-col>
-      <div id="myChart" style="height:750px;"></div>
+      <div id="myChart" style="min-height:420px;"></div>
     </el-col>
 </el-row>
 </div>

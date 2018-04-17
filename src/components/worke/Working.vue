@@ -3,8 +3,6 @@
   <Index></Index>
     <el-table 
       :data="tableData.length?tableData.slice((currentPage-1)*pagesize,currentPage*pagesize):[]"
-      @cell-click="hasComplate"
-      max-height="700"
       style="width:100%;"
      >
       <el-table-column type="expand">
@@ -62,7 +60,7 @@
         label="操作"
         width="180">
         <template slot-scope="scope">
-          <el-button  type="primary" size="small">完成</el-button>
+          <el-button  type="primary" @click="hasComplate(scope.row)" size="small">完成</el-button>
           <el-button  type="danger" size="small">提交审核</el-button>
         </template>
       </el-table-column>
@@ -136,7 +134,7 @@ export default {
         this.countObj[this.$route.path] = this.tableData.length;
         bus.$emit("getCount", this.countObj);
     },
-    hasComplate(row, column, cell, event) {
+    hasComplate(row) {
       this.getWorking(row.missionid).then(res => {
         // this.tableData = res.data;
         // this.sendCount();

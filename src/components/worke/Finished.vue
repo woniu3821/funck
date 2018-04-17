@@ -1,79 +1,85 @@
 <template>
 <div>
   <Index></Index>
-  <el-table class="finished_table"
-    :data="tableData2"
-    style="width: 100%"
-  >
-    <el-table-column
-      prop="date"
-      label="任务ID"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="任务名称"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="发起人">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="完成人">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="完成时间">
-    </el-table-column>
-  </el-table>
+ <el-row>
+  <div v-if="hasData" id="myChartpie" style="height:500px;width:100%;"></div>
+  <div v-else class="info">暂无统计信息</div>
+ </el-row>
 </div>
 </template>
-
 <style scoped>
-.finished_table{
-  text-align: left;
+.info{
+  text-align:center;
 }
-  .el-table .warning-row {
-    background: oldlace;
-  }
-
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
-
 </style>
-
 <script>
-  import Index from './index'
-  export default {
+import Index from "./index"
+import { mapActions, mapGetters } from "vuex";
+let echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/pie");
+require('echarts/lib/component/tooltip');
+require('echarts/lib/component/title');
+require("echarts/lib/component/legend")
+export default {
+  name: "build",
   components: {
-   Index
+    Index
   },
-    methods: {
-
-    },
-    data() {
-      return {
-        tableData2: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }]
-      }
+  data() {
+    return{
+      hasData:true
     }
+  },
+  mounted(){
+    this.getMyCensus().then(res=>{
+      if(!res.success){
+        let ndata=[]
+        let odata= ['已接收任务','未接收任务','已完成任务','超时任务']
+        for(let index in res.data[0]){
+          ndata.push({value:res.data[0][index],name:odata[index]})
+        }
+        this.pieOption(odata,ndata)
+      }else{
+        this.hasData=false;
+      }
+
+    })
+  },
+  methods:{
+    pieOption(odata,ndata){
+      let myChartpie = echarts.init(document.getElementById("myChartpie"));
+      myChartpie.setOption({
+       title : {
+        text: '我的任务统计',
+        x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: odata
+        },
+        series : [
+            {
+                name: '任务详情',
+                type: 'pie',
+            radius : '55%',
+            center: ['50%', '50%'],
+            data:ndata,
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 5,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]})
+    },
+    ...mapActions(['getMyCensus'])
   }
+}
 </script>

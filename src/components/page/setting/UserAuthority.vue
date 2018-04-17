@@ -10,7 +10,7 @@
                 v-model="filterText">
               </el-input>
           </el-form-item>
-            <div style="max-height:555px;overflow-y:auto;">
+            <div>
               <el-tree 
               style="height:100%"
                 class="filter-tree"
@@ -31,7 +31,6 @@
             <el-table
               ref="singleTable"
               :data="options"
-               max-height="600"
               :default-sort="defaultSort"
               @selection-change="handleSelectionChange"
               >

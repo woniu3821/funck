@@ -2,8 +2,8 @@
 <div>
   <Index></Index>
 <el-form :model="buildForm" :rules="rules" ref="buildForm" label-width="100px" class="demo-buildForm">
-<el-row>
-  <el-col :lg="16" :xl="12">
+<el-row :gutter="20">
+  <el-col :lg="10" :xl="10">
     <el-form-item label="任务名称:" prop="title">
       <el-input v-model="buildForm.title"></el-input>
     </el-form-item>
@@ -49,30 +49,16 @@
           ref="tree">
         </el-tree>
     </el-form-item>
-    <el-form-item label="任务详情" prop="desc">
-      <el-input type="textarea" v-model="buildForm.desc"></el-input>
-    </el-form-item>
-    <el-form-item label="上传附件">
-      <el-upload
-        class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :before-remove="beforeRemove"
-        multiple
-        :limit="3"
-        :on-exceed="handleExceed"
-        :file-list="fileList"
-        ref="tree2"
-        >
-        <el-button size="small" type="primary">点击上传</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
+     </el-col>
+  <el-col :lg="14" :xl="14">
+      <el-form-item label="任务详情" prop="desc">
+      <el-input type="textarea" rows="15" v-model="buildForm.desc"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="success" @click="submitForm('buildForm')">立即创建</el-button>
       <el-button @click="resetForm('buildForm')">取消</el-button>
     </el-form-item>
+  
   </el-col>
 </el-row>
 </el-form>
@@ -148,19 +134,7 @@ export default {
           }
         ],
         desc: [{ required: true, message: "请填写任务详情", trigger: "blur" }]
-      },
-      fileList: [
-        {
-          name: "food.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        },
-        {
-          name: "food2.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        }
-      ]
+      }
     };
   },
   mounted() {
@@ -223,27 +197,6 @@ export default {
     resetForm(formName) {
       this.resetChecked() //强制将选择的用户重置
       this.$refs[formName].resetFields();
-    },
-    //文件上传
-    handleChange(value, direction, movedKeys) {
-      console.log(value, direction, movedKeys);
-    },
-    handleRemove(file, fileList) {
-      // console.log(file, fileList);
-    },
-    handlePreview(file) {
-      // console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${
-          files.length
-        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
-      );
-    },
-
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
     },
     ...mapActions({
       buildSubmit: "buildSubmit"

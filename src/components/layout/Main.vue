@@ -13,5 +13,5 @@
 .el-menu-demo{
     margin-bottom: 20px;
 }
-#mainBox>div{width: 100%;}
+#mainBox>div{width: 100%;heigh:100%;}
 </style>

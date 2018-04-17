@@ -1,6 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
 var proxy = require('http-proxy-middleware');
+
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -12,8 +13,7 @@ module.exports = {
     filename: 'build.js'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.css$/,
         use: [
           'vue-style-loader',
@@ -24,8 +24,7 @@ module.exports = {
         loader: 'vue-loader',
         exclude: /node_modules/,
         options: {
-          loaders: {
-          }
+          loaders: {}
           // other vue-loader options go here
         }
       },
@@ -42,7 +41,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,//需要配置
+        test: /\.(eot|svg|ttf|woff|woff2)$/, //需要配置
         loader: 'file-loader'
       },
     ]
@@ -50,7 +49,7 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@':resolve('src')
+      '@': resolve('src')
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
@@ -58,17 +57,19 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true,
     overlay: true,
-    stats: { colors: true },
-    proxy: [
-      {
-        context: ['/login', '/register', '/user/navlist', '/user/outfit', '/user/build', '/user/created', 
-        '/user/getframelist','/user/setauthority','/user/upmission', '/captcha', '/checkname', '/getgroup',
-          '/setgroup', '/getgrouptree', '/getwating', '/getworking','/getprogress'],
-        target: "http://localhost:3000",
-        changeOrigin: true,
-        secure: false
-      }
-    ]
+    stats: {
+      colors: true
+    },
+    proxy: [{
+      context: ['/login', '/register', '/user/navlist', '/user/outfit', '/user/build', '/user/created',
+        '/user/getframelist', '/user/setauthority', '/user/upmission', '/captcha', '/checkname', '/getgroup',
+        '/setgroup', '/getgrouptree', '/getwating', '/getworking', '/getprogress', '/getmycensus', '/upload',
+        '/user/getuserinfo', '/user/setmyinfo'
+      ],
+      target: "http://localhost:3000",
+      changeOrigin: true,
+      secure: false
+    }]
   },
   performance: {
     hints: false

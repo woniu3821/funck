@@ -16,7 +16,6 @@
     <el-table-column
       prop="title"
       label="任务名称"
-      min-width="220"
       >
     </el-table-column>
     <el-table-column
@@ -35,7 +34,6 @@
     <el-table-column
       prop="detail"
       label="任务简介"
-      min-width="500"
       :show-overflow-tooltip="true"
      >
     </el-table-column>
@@ -56,7 +54,7 @@
     <el-table-column
       fixed="right"
       label="操作"
-      width="100">
+      width="80">
       <template slot-scope="scope">
         <el-button  @click.native.prevent="handleClick(scope.row,scope.$index,tableData)" :loading="loading" type="success" size="small">接受</el-button>
       </template>
@@ -70,7 +68,7 @@
 }
 .el-tooltip__popper.is-light {
   left: 50% !important;
-  max-width: 500px !important;
+  max-width: 50% !important;
   line-height: 20px;
   font-size: 14px;
 }

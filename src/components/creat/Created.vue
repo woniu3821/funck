@@ -3,7 +3,6 @@
   <Index></Index>
   <el-table class="created_table"
     :data="getCreated.length?getCreated.slice((currentPage-1)*pagesize,currentPage*pagesize):[]"
-    max-height="700"
     style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -112,6 +111,8 @@
 }
 .el-pagination {
   margin-top: 25px;
+  margin-bottom:25px;
+  
 }
 </style>
 <script>
