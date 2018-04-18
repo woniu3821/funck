@@ -43,7 +43,7 @@
 </div>
 </template>
 <script>
-import { mapActions,mapState } from "vuex";
+import { mapActions,mapState } from "vuex"
   export default {
     data() {
     var validatePass = (rule, value, callback) => {
@@ -161,10 +161,7 @@ import { mapActions,mapState } from "vuex";
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handleSuccess(){
+      handleSuccess(file){
         this.$message({
           message: '图片已上传成功',
           type: 'success'

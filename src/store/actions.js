@@ -259,6 +259,57 @@ const actions = {
       })
     })
   },
+  getUserMap({
+    commit
+  }, data) { //获取任务统计
+    let uid = State.state.uid;
+    return new Promise((resolve, reject) => {
+      axios({
+        url: '/getusermap',
+        method: 'post',
+        data: {
+          uid,
+          ...data
+        }
+      }).then((res) => {
+        if (res.status == 200) {
+          resolve(res.data)
+        } else {
+          reject(err)
+        }
+      }).catch((err) => {
+        reject(err)
+        console.log(err)
+      })
+    })
+  },
+  subDaily({
+    commit
+  }, data) { //工作日志
+    let uid = State.state.uid;
+    return new Promise((resolve, reject) => {
+      axios({
+        url: '/user/subdaily',
+        method: 'post',
+        data: {
+          uid,
+          ...data
+        }
+      }).then((res) => {
+        if (res.status == 200) {
+          if (res.data.success) {
+            commit(types.INFOMSG, res.data)
+            resolve()
+          }
+        } else {
+          reject(err)
+        }
+      }).catch((err) => {
+        reject(err)
+        console.log(err)
+      })
+    })
+  },
 }
 
 export default actions;

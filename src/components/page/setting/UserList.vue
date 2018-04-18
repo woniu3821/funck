@@ -1,77 +1,182 @@
 <template>
 <div>
   <Index></Index>
-  <el-form ref="form" :model="form" label-width="80px">
-    <el-form-item label="活动名称">
-      <el-input v-model="form.name"></el-input>
-    </el-form-item>
-    <el-form-item label="活动区域">
-      <el-select v-model="form.region" placeholder="请选择活动区域">
-        <el-option label="区域一" value="shanghai"></el-option>
-        <el-option label="区域二" value="beijing"></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="活动时间">
-      <el-col :span="11">
-        <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-      </el-col>
-      <el-col class="line" :span="2">-</el-col>
-      <el-col :span="11">
-        <el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-      </el-col>
-    </el-form-item>
-    <el-form-item label="即时配送">
-      <el-switch v-model="form.delivery"></el-switch>
-    </el-form-item>
-    <el-form-item label="活动性质">
-      <el-checkbox-group v-model="form.type">
-        <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-        <el-checkbox label="地推活动" name="type"></el-checkbox>
-        <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-        <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
-    <el-form-item label="特殊资源">
-      <el-radio-group v-model="form.resource">
-        <el-radio label="线上品牌商赞助"></el-radio>
-        <el-radio label="线下场地免费"></el-radio>
-      </el-radio-group>
-    </el-form-item>
-    <el-form-item label="活动形式">
-      <el-input type="textarea" v-model="form.desc"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">立即创建</el-button>
-      <el-button>取消</el-button>
-    </el-form-item>
-  </el-form>
+  <el-row :gutter="30">
+    <el-col :span="6">
+      <el-button type="success" class="peoples">月新增用户：{{now}}</el-button>
+    </el-col>
+    <el-col  :span="6">
+      <el-button type="primary" class="peoples">去年同期(月)：{{old}}</el-button>
+    </el-col>
+    <el-col  :span="6">
+      <el-button type="warning" class="peoples">同比增长(月)：{{now-old}}</el-button>
+    </el-col>
+    <el-col  :span="6">
+      <el-button type="infor" class="peoples">总用户数：80000</el-button>
+    </el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="24">
+    <div id="myCharLine" ></div>
+    </el-col>
+  </el-row>
 </div>
 </template>
 </div>
+<style>
+.peoples{
+  width:100%;height:40px;
+  font-size:16px;
+  box-sizing:border-box;
+}
+#myCharLine{
+  margin-top:20px;
+  width:100%;
+  height:60%;
+  min-height:440px;
+}
+</style>
 <script>
 import Index from "./index"
+import { mapActions, mapGetters } from "vuex";
+let echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/line");
+require('echarts/lib/component/tooltip');
+require('echarts/lib/component/title');
+require("echarts/lib/component/legend")
 export default {
   components: {
     Index
   },
   data() {
     return {
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      }
+      now:"",
+      old:"",
+      total:""
     };
   },
+  mounted(){
+    this.getUserMap().then(res=>{
+      let nowArray=this.tranData(res.now);
+      this.now=this.getMonthData(nowArray,"now")
+      let pastArray=this.tranData(res.past);
+      this.old=this.getMonthData(pastArray,"past")
+      this.LineOption(nowArray,pastArray);
+    })
+    
+  },
   methods: {
-    onSubmit() {
-      console.log("submit!");
+    tranData(data){
+      let monthdata=[];
+      let total=[];
+      if(Array.isArray(data)&&data.length){
+        for (let {months,usertotal} of data){
+          monthdata.push(months);
+          total.push(usertotal);
+
+        }
+      }
+      return [monthdata,total]
+    },
+    getMonthData(odata,now){
+      let date=new Date();
+      let Y="";
+      now=="now"?Y = date.getFullYear() + "-":Y = date.getFullYear()-1 + "-";
+      let M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1);
+      if(odata[0].indexOf(Y+M)==-1){
+        return 0
+      }else{
+        return odata[1][odata[0].indexOf(Y+M)]
+      }
+    },
+    LineOption(nowdata,pastdata){
+      let myCharLine = echarts.init(document.getElementById("myCharLine"));
+      var colors = ['#85ce61', '#66b1ff', '#675bba'];
+      myCharLine.setOption({
+      color: colors,
+      tooltip: {
+          trigger: 'none',
+          axisPointer: {
+              type: 'cross'
+          }
+      },
+      legend: {
+          data:['今年', '去年']
+      },
+      grid: {
+          top: 50,
+          bottom: 50
+      },
+      xAxis: [
+        {
+            type: 'category',
+            axisTick: {
+                alignWithLabel: true
+            },
+            axisLine: {
+                onZero: false,
+                lineStyle: {
+                    color: colors[1]
+                }
+            },
+            axisPointer: {
+                label: {
+                    formatter: function (params) {
+                        return '注册量 ' + params.value
+                            + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                    }
+                }
+            },
+            data: pastdata[0]
+        },
+        {
+            type: 'category',
+            axisTick: {
+                alignWithLabel: true
+            },
+            axisLine: {
+                onZero: false,
+                lineStyle: {
+                    color: colors[0]
+                }
+            },
+            axisPointer: {
+                label: {
+                    formatter: function (params) {
+                        return '注册量 '+ params.value
+                            + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                    }
+                }
+            },
+            data: nowdata[0]
+        }
+    ],
+      yAxis: [
+          {
+              type: 'value'
+          }
+      ],
+      series: [
+          {
+              name:'今年',
+              type:'line',
+              xAxisIndex: 1,
+              smooth: true,
+              data: nowdata[1]
+          },
+          {
+              name:'去年',
+              type:'line',
+              smooth: true,
+              data: pastdata[1]
+          }
+      ]
+    })
+    },
+    ...mapActions(['getUserMap'])
+  },
+    computed:{
+
     }
-  }
 };
 </script>

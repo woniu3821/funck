@@ -81,7 +81,7 @@ export default {
     handleSelect(index){
       switch(index){
         case '1':this.$router.replace('/admin')
-        braek;
+        break;
         case '2':this.userlogout().then(_=>{
           this.$router.replace('/login')
         })
