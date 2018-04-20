@@ -310,6 +310,33 @@ const actions = {
       })
     })
   },
+  getMyDaily({
+    commit
+  }) { //工作日志
+    let uid = State.state.uid;
+    return new Promise((resolve, reject) => {
+      let loadingInstance = Loading.service({
+        lock: true
+      })
+      axios({
+        url: '/user/getmydaily',
+        method: 'post',
+        data: {
+          uid
+        }
+      }).then((res) => {
+        if (res.status == 200) {
+          loadingInstance.close();
+          resolve(res.data)
+        } else {
+          reject(err)
+        }
+      }).catch((err) => {
+        reject(err)
+        console.log(err)
+      })
+    })
+  },
 }
 
 export default actions;

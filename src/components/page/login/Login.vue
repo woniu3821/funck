@@ -7,13 +7,12 @@
     <el-form-item  label="密码" prop="password">
     <el-input type="password" placeholder="请输入密码" v-model="loginForm.password" auto-complete="off"></el-input>
     </el-form-item>
-    <el-row>
-      <el-col :span="8"><el-checkbox v-model="loginForm.checked">一周之内免登陆</el-checkbox></el-col>
+    <el-row type="flex" justify="end">
       <el-col :span="3"><router-link to="/register">注 册</router-link></el-col>
     </el-row>
   </el-form>
   <div slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="submitForm('loginForm')">登 录</el-button>
+    <el-button type="primary" @click="submitForm('loginForm')" :loading="loading">登 录</el-button>
     <el-button @click="dialogFormVisible = false">取 消</el-button> 
   </div>
 </el-dialog>
@@ -30,13 +29,11 @@ export default {
   data() {
     return {
       dialogFormVisible: true,
+      loading:false,
       loginForm: {
         name: "",
-        password: "",
-        checked: false
+        password: ""
       },
-      sys_error: "",
-      validate: false,
       rules: {
         name: [
           { required: true, message: "登录账号不能为空", trigger: "blur" }
@@ -75,7 +72,9 @@ export default {
             password: this.loginForm.password
             // checked: this.loginForm.checked
           };
+          this.loading=true;
           this.loginByEmail(data).then(res => {
+            this.loading=false;
             if (res.data.login) {
               this.getOutfit()
               this.getCreated()
@@ -84,19 +83,16 @@ export default {
                 message:res.data.message,
                 type: "success"
               });
-              this.$router.push("/work");
-              
+              this.$router.replace("/home");
             } else {
               this.$notify({
                 title: "警告",
                 message:res.data.message,
                 type: "warning"
               });
-              // this.validate = res.data.validate;
             }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

@@ -64,7 +64,7 @@ module.exports = {
       context: ['/login', '/register', '/user/navlist', '/user/outfit', '/user/build', '/user/created',
         '/user/getframelist', '/user/setauthority', '/user/upmission', '/captcha', '/checkname', '/getgroup',
         '/setgroup', '/getgrouptree', '/getwating', '/getworking', '/getprogress', '/getmycensus', '/upload',
-        '/user/getuserinfo', '/user/setmyinfo', '/getusermap', '/logupload', '/user/subdaily'
+        '/user/getuserinfo', '/user/setmyinfo', '/getusermap', '/logupload', '/user/subdaily', '/user/getmydaily'
       ],
       target: "http://localhost:3000",
       changeOrigin: true,

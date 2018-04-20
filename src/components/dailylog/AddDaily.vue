@@ -88,11 +88,14 @@ export default {
       this.detailContent=editor.html;
     },
     onEditorReady(editor) {
-        
+        let fromData = this.$route.params //路由传参传回修改任务的数据
+        if (fromData) {
+            this.id=fromData.ID;
+            this.detailContent=fromData.content;
+        }
     },       // 上传图片前
     beforeUpload(file) {
         this.quillUpdateImg = true
-        console.log(file.type)
         const isJPG = (file.type === 'image/jpeg'||file.type ==='image/png')
         const isLt500 = file.size / 1024 <= 500;
         if (!isJPG) {
@@ -138,7 +141,8 @@ export default {
             this.loading=true;
             this.subDaily(data).then(_=>{
                 this.loading=false;
-                this.detailContent=""
+                this.detailContent="";
+                this.id="";
             })
         }else{
             this.$message.warning('您还没输入内容')
@@ -155,9 +159,7 @@ export default {
     })
   },
   mounted() {
-    // you can use current editor object to do something(editor methods)
 
-    // console.log(this.$refs.myTextEditor.quillEditor)
   },
 
 };

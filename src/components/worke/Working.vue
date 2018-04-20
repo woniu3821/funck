@@ -65,7 +65,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-row type="flex" v-if="tableData.length>pagesize" justify="center">
+    <el-row type="flex" v-if="tableData.length!==0" justify="center">
       <el-pagination
         background
         @size-change="handleSizeChange"
@@ -98,7 +98,7 @@
   color: yellowgreen;
 }
 .el-pagination {
-  margin-top: 25px;
+    margin: 25px auto;
 }
 </style>
 

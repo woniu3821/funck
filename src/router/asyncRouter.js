@@ -61,6 +61,7 @@ const asyncRouter = [{
   },
   {
     path: '/adddaily',
+    name: 'adddaily',
     meta: {
       permission: []
     },
