@@ -3,145 +3,240 @@
 // path 页面跳转地址
 // permission字段内容从后台获取，代表该页内部详细权限，以key:value形式存储
 
-const asyncRouter = [{
-    path: '/asyncRouter',
-    component: r => require.ensure([], () => r(require('../components/layout/layout.vue')), 'layout'),
+const asyncRouter = [
+  {
+    path: "/asyncRouter",
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/layout/layout.vue")),
+        "layout"
+      ),
     children: []
   },
   {
-    path: '/creat',
+    path: "/creat",
     meta: {
       permission: []
     },
 
-    component: r => require.ensure([], () => r(require('../components/creat/index.vue')), 'Creat'),
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/creat/index.vue")),
+        "Creat"
+      )
   },
   {
-    name: 'build',
-    path: '/build',
+    name: "build",
+    path: "/build",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/creat/Build.vue')), 'Creat')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/creat/Build.vue")),
+        "Creat"
+      )
   },
   {
-    path: '/created',
+    path: "/created",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/creat/Created.vue')), 'Creat')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/creat/Created.vue")),
+        "Creat"
+      )
   },
   {
-    path: '/census',
+    path: "/census",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/creat/Census.vue')), 'Creat')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/creat/Census.vue")),
+        "Creat"
+      )
   },
   {
-    path: '/schedule',
+    name: "schedule",
+    path: "/schedule",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/creat/Census.vue')), 'Schedule')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/schedule/index.vue")),
+        "Schedule"
+      )
   },
   {
-    path: '/dailylog',
+    path: "/dailylog",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/dailylog/index.vue')), 'Dailylog')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/dailylog/index.vue")),
+        "Dailylog"
+      )
   },
   {
-    path: '/mydaily',
+    path: "/mydaily",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/dailylog/MyDaily.vue')), 'MyDaily')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/dailylog/MyDaily.vue")),
+        "MyDaily"
+      )
   },
   {
-    path: '/adddaily',
-    name: 'adddaily',
+    path: "/adddaily",
+    name: "adddaily",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/dailylog/AddDaily.vue')), 'AddDaily')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/dailylog/AddDaily.vue")),
+        "AddDaily"
+      )
   },
   {
-    path: '/checkdaily',
+    path: "/checkdaily",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/dailylog/CheckDaily.vue')), 'CheckDaily')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/dailylog/CheckDaily.vue")),
+        "CheckDaily"
+      )
+  },
+  {
+    name: "setting",
+    path: "/setting",
+    meta: {
+      permission: []
+    },
 
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/page/setting/index.vue")),
+        "Setting"
+      )
   },
   {
-    name: 'setting',
-    path: '/setting',
+    path: "/usersetting",
     meta: {
       permission: []
     },
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/page/setting/UserList.vue")),
+        "Setting"
+      )
+  },
+  {
+    path: "/authority",
+    meta: {
+      permission: []
+    },
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/page/setting/UserAuthority.vue")),
+        "Setting"
+      )
+  },
+  {
+    path: "/organize",
+    meta: {
+      permission: []
+    },
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/page/setting/UserOrganize.vue")),
+        "Setting"
+      )
+  },
 
-    component: r => require.ensure([], () => r(require('../components/page/setting/index.vue')), 'Setting'),
-  },
   {
-    path: '/usersetting',
+    path: "/work",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/page/setting/UserList.vue')), 'Setting')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/worke/index.vue")),
+        "Work"
+      )
   },
   {
-    path: '/authority',
+    path: "/finished",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/page/setting/UserAuthority.vue')), 'Setting')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/worke/Finished.vue")),
+        "Work"
+      )
   },
   {
-    path: '/organize',
+    path: "/waiting",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/page/setting/UserOrganize.vue')), 'Setting')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/worke/Waiting.vue")),
+        "Work"
+      )
   },
-
   {
-    path: '/work',
+    path: "/working",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/worke/index.vue')), 'Work'),
-
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/worke/Working.vue")),
+        "Work"
+      )
   },
   {
-    path: '/finished',
+    path: "/overtimer",
     meta: {
       permission: []
     },
-    component: r => require.ensure([], () => r(require('../components/worke/Finished.vue')), 'Work')
-  },
-  {
-    path: '/waiting',
-    meta: {
-      permission: []
-    },
-    component: r => require.ensure([], () => r(require('../components/worke/Waiting.vue')), 'Work')
-  },
-  {
-    path: '/working',
-    meta: {
-      permission: []
-    },
-    component: r => require.ensure([], () => r(require('../components/worke/Working.vue')), 'Work')
-  },
-  {
-    path: '/overtimer',
-    meta: {
-      permission: []
-    },
-    component: r => require.ensure([], () => r(require('../components/worke/Overtimer.vue')), 'Work')
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("../components/worke/Overtimer.vue")),
+        "Work"
+      )
   }
-]
+];
 
-export default asyncRouter
+export default asyncRouter;

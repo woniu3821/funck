@@ -1,8 +1,8 @@
 <template>
-<div>
-  <Index></Index>
-  {{msg}}
-</div>
+  <div>
+    <Index></Index>
+    {{msg}}
+  </div>
 </template>
 <style scoped>
 .waiting_table {
@@ -15,12 +15,10 @@ export default {
   components: {
     Index
   },
-  methods: {
-  
-  },
+  methods: {},
   data() {
     return {
-      msg:"待开发。。。"
+      msg: "待开发。。。"
     };
   }
 };

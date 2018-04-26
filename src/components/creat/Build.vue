@@ -1,68 +1,52 @@
 <template>
-<div>
-  <Index></Index>
-<el-form :model="buildForm" :rules="rules" ref="buildForm" label-width="100px" class="demo-buildForm">
-<el-row :gutter="20">
-  <el-col :lg="10" :xl="10">
-    <el-form-item label="任务名称:" prop="title">
-      <el-input v-model="buildForm.title"></el-input>
-    </el-form-item>
+  <div>
+    <Index></Index>
+    <el-form :model="buildForm" :rules="rules" ref="buildForm" label-width="100px" class="demo-buildForm">
       <el-row :gutter="20">
-    <el-form-item label="截止日期">
-        <el-col :md="16" :lg="14" :xl="16">
-          <el-form-item prop="date1">
-            <el-date-picker type="date" placeholder="选择日期" v-model="buildForm.date1" style="width: 100%;"></el-date-picker>
+        <el-col :lg="10" :xl="10">
+          <el-form-item label="任务名称:" prop="title">
+            <el-input v-model="buildForm.title"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :md="8" :lg="10" :xl="8">
-          <el-form-item prop="date2">
-          <el-time-select 
-            style="width:100%"
-            v-model="buildForm.date2"
-            :picker-options="{
+          <el-row :gutter="20">
+            <el-form-item label="截止日期">
+              <el-col :md="16" :lg="14" :xl="16">
+                <el-form-item prop="date1">
+                  <el-date-picker type="date" placeholder="选择日期" v-model="buildForm.date1" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :md="8" :lg="10" :xl="8">
+                <el-form-item prop="date2">
+                  <el-time-select style="width:100%" v-model="buildForm.date2" :picker-options="{
               start: '08:30',
               step: '00:30',
               end: '17:30'
-            }"
-            placeholder="选择时间">
-          </el-time-select>
+            }" placeholder="选择时间">
+                  </el-time-select>
+                </el-form-item>
+              </el-col>
+            </el-form-item>
+          </el-row>
+          <el-form-item label="执行人" required>
+            <el-input placeholder="试试搜索网络部" v-model="filterText">
+            </el-input>
           </el-form-item>
-          </el-col>
-    </el-form-item>
+          <el-form-item prop="peoples">
+            <el-tree class="filter-tree" :data="options" :props="defaultProps" node-key="id" show-checkbox :indent=20 :filter-node-method="filterNode" @check-change="getCheckedKeys" ref="tree">
+            </el-tree>
+          </el-form-item>
+        </el-col>
+        <el-col :lg="14" :xl="14">
+          <el-form-item label="任务详情" prop="desc">
+            <el-input type="textarea" rows="15" v-model="buildForm.desc"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="success" :loading="loading" @click="submitForm('buildForm')">立即创建</el-button>
+            <el-button @click="resetForm('buildForm')">取消</el-button>
+          </el-form-item>
+        </el-col>
       </el-row>
-    <el-form-item label="执行人">
-        <el-input
-          placeholder="试试搜索网络部"
-          v-model="filterText">
-        </el-input>
-    </el-form-item>
-    <el-form-item prop="peoples">
-        <el-tree
-          class="filter-tree"
-          :data="options"
-          :props="defaultProps"
-          node-key="id"
-          show-checkbox
-          :indent=20
-          :filter-node-method="filterNode"
-          @check-change="getCheckedKeys"
-          ref="tree">
-        </el-tree>
-    </el-form-item>
-     </el-col>
-  <el-col :lg="14" :xl="14">
-      <el-form-item label="任务详情" prop="desc">
-      <el-input type="textarea" rows="15" v-model="buildForm.desc"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="success" @click="submitForm('buildForm')">立即创建</el-button>
-      <el-button @click="resetForm('buildForm')">取消</el-button>
-    </el-form-item>
-  
-  </el-col>
-</el-row>
-</el-form>
-</div>
+    </el-form>
+  </div>
 </template>
 <style scoped>
 #usually {
@@ -84,13 +68,14 @@
 </style>
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import Index from "./index"
+import Index from "./index";
 export default {
   components: {
-   Index
+    Index
   },
   data() {
     return {
+      loading: false,
       buildForm: {
         title: "",
         date1: "",
@@ -130,7 +115,7 @@ export default {
             type: "array",
             required: true,
             message: "请选择执行人",
-            trigger: "blur"
+            trigger: "change"
           }
         ],
         desc: [{ required: true, message: "请填写任务详情", trigger: "blur" }]
@@ -155,6 +140,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.loading = true;
           let data = {
             title: this.buildForm.title,
             times: this.linkData,
@@ -164,6 +150,7 @@ export default {
           };
           this.buildSubmit(data)
             .then(res => {
+              this.loading = false;
               switch (res.type) {
                 case "success":
                   this.resetForm(formName);
@@ -195,7 +182,7 @@ export default {
       return data.label.indexOf(value) !== -1;
     },
     resetForm(formName) {
-      this.resetChecked() //强制将选择的用户重置
+      this.resetChecked(); //强制将选择的用户重置
       this.$refs[formName].resetFields();
     },
     ...mapActions({

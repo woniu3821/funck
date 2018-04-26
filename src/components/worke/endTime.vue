@@ -1,9 +1,9 @@
 <template>
-    <span :class="{active:isActive}">
-        <slot>
-            {{content}}
-        </slot>
-    </span>
+  <span :class="{active:isActive}">
+    <slot>
+      {{content}}
+    </slot>
+  </span>
 </template>
 <style scoped>
 .active {
@@ -59,10 +59,10 @@ export default {
           clearInterval(timer);
           self.isActive = true;
           self.content = self.endText;
-          self.$emit('timeStop')
+          self.$emit("timeStop");
         }
       }, 1000);
-    },
+    }
   }
 };
 </script>

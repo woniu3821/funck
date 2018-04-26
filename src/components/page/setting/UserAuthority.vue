@@ -1,90 +1,52 @@
 <template>
-<div>
-  <Index></Index>
-<el-form ref="form" :model="form" :rules="rules">
-  <el-row :gutter="20">
-    <el-col  :lg="10" :xl="8" >
-          <el-form-item label="请选择修改对象" class="input_bottom" prop="peoples" >
-              <el-input
-                placeholder="试试搜索网络部"
-                v-model="filterText">
-              </el-input>
+  <div>
+    <Index></Index>
+    <el-form ref="form" :model="form" :rules="rules">
+      <el-row :gutter="20">
+        <el-col :lg="10" :xl="8">
+          <el-form-item label="请选择修改对象" class="input_bottom" prop="peoples">
+            <el-input placeholder="试试搜索网络部" v-model="filterText">
+            </el-input>
           </el-form-item>
-            <div>
-              <el-tree 
-              style="height:100%"
-                class="filter-tree"
-                :data="peoples"
-                :props="defaultProps"
-                node-key="id"
-                show-checkbox
-                :indent=30
-                :filter-node-method="filterNode"
-                @check-change="getCheckedKeys"
-                default-expand-all
-                ref="tree">
-              </el-tree>
-              </div>
+          <div>
+            <el-tree style="height:100%" class="filter-tree" :data="peoples" :props="defaultProps" node-key="id" show-checkbox :indent=30 :filter-node-method="filterNode" @check-change="getCheckedKeys" default-expand-all ref="tree">
+            </el-tree>
+          </div>
         </el-col>
         <el-col :lg="14" :xl="16">
-            <el-form-item label="请设置界面权限"></el-form-item>
-            <el-table
-              ref="singleTable"
-              :data="options"
-              :default-sort="defaultSort"
-              @selection-change="handleSelectionChange"
-              >
-              <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column>
-              <el-table-column
-                prop="parentid"
-                label="父栏目ID"
-                width="80">
-              </el-table-column>
-              <el-table-column
-                prop="fid"
-                label="栏目ID"
-                width="80">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="栏目名"
-                width="100"
-                >
-              </el-table-column>
-              <el-table-column
-                label="权限按钮"
-                >
-                <template v-if="scope.row.button"  slot-scope="scope">
-                  <el-checkbox-group v-model="scope.row.permission">
-                    <el-row class="buttonChecked" justify="space-around" type="flex">
-                      <el-checkbox v-for="(item,index) in scope.row.button" :label="item"  :key="index">{{item}}</el-checkbox>
-                    </el-row>
-                  </el-checkbox-group>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="排序"
-                width="150"
-                fixed="right"
-                prop="orders"
-                sortable
-                >
-                <template slot-scope="scope" >
-                  <el-input-number  size="small" v-model="scope.row.orders" controls-position="right" :min="1" :max="options.length"></el-input-number>
-                </template>
-              </el-table-column>
-            </el-table>
-      </el-col>
-    </el-row>
-    <el-row type="flex" justify="center" class="button_bottom">
-      <el-button type="info"  @click="resetForm('form')">重置</el-button>
-      <el-button type="primary" @click="onSubmit('form')" :loading="loading">提交设置</el-button>
-    </el-row>
-</el-form>
-</div>
+          <el-form-item label="请设置界面权限"></el-form-item>
+          <el-table ref="singleTable" :data="options" :default-sort="defaultSort" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="parentid" label="父栏目ID" width="80">
+            </el-table-column>
+            <el-table-column prop="fid" label="栏目ID" width="80">
+            </el-table-column>
+            <el-table-column prop="name" label="栏目名" width="100">
+            </el-table-column>
+            <el-table-column label="权限按钮">
+              <template v-if="scope.row.button" slot-scope="scope">
+                <el-checkbox-group v-model="scope.row.permission">
+                  <el-row class="buttonChecked" justify="space-around" type="flex">
+                    <el-checkbox v-for="(item,index) in scope.row.button" :label="item" :key="index">{{item}}</el-checkbox>
+                  </el-row>
+                </el-checkbox-group>
+              </template>
+            </el-table-column>
+            <el-table-column label="排序" width="150" fixed="right" prop="orders" sortable>
+              <template slot-scope="scope">
+                <el-input-number size="small" v-model="scope.row.orders" controls-position="right" :min="1" :max="options.length"></el-input-number>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="center" class="button_bottom">
+        <el-button type="info" @click="resetForm('form')">重置</el-button>
+        <el-button type="primary" @click="onSubmit('form')" :loading="loading">提交设置</el-button>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 <style scoped>
 .el-checkbox + .el-checkbox {
@@ -118,7 +80,7 @@ export default {
       form: {
         peoples: [],
         frames: [],
-        subdata:{}
+        subdata: {}
       },
       loading: false,
       defaultSort: { prop: "orders", order: "ascending" },
@@ -167,8 +129,9 @@ export default {
           for (let { fid } of this.frames) {
             this.form.frames.push(fid);
           }
-          for (let {fid, permission,orders } of this.$refs.singleTable.tableData) {
-            this.form.subdata[fid]={permission:permission,order:orders};
+          for (let { fid, permission, orders } of this.$refs.singleTable
+            .tableData) {
+            this.form.subdata[fid] = { permission: permission, order: orders };
           }
           this.loading = true;
           this.setAuthority(this.form).then(_ => {
@@ -182,9 +145,8 @@ export default {
     },
     resetForm(formName) {
       this.$refs.tree.setCheckedKeys([]); //重置树选项
-      this.form.subdata={},
-      this.form.frames=[];
-      this.frames=[];
+      (this.form.subdata = {}), (this.form.frames = []);
+      this.frames = [];
       this.setFrameworke().then(res => {
         //初始化表格数据
         this.parseOption(res); //格式化数据
@@ -199,7 +161,7 @@ export default {
             this.$refs.singleTable.clearSelection();
             if (Array.isArray(res) && res.length) {
               for (let { orders, permission, fid } of res) {
-                this.permission2[fid] = permission.split(",");
+                if (permission) this.permission2[fid] = permission.split(",");
                 this.orders2[fid] = orders;
               }
               this.tableParse(

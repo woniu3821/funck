@@ -1,27 +1,26 @@
-var path = require('path')
-var webpack = require('webpack')
-var proxy = require('http-proxy-middleware');
+var path = require("path");
+var webpack = require("webpack");
+var proxy = require("http-proxy-middleware");
 
 function resolve(dir) {
-  return path.join(__dirname, '..', dir)
+  return path.join(__dirname, "..", dir);
 }
 module.exports = {
-  entry: './src/main.js',
+  entry: "./src/main.js",
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js'
+    path: path.resolve(__dirname, "./dist"),
+    publicPath: "/dist/",
+    filename: "build.js"
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ],
-      }, {
+        use: ["vue-style-loader", "css-loader"]
+      },
+      {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        loader: "vue-loader",
         exclude: /node_modules/,
         options: {
           loaders: {}
@@ -30,28 +29,28 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'file-loader',
+        loader: "file-loader",
         options: {
-          name: '[name].[ext]?[hash]'
+          name: "[name].[ext]?[hash]"
         }
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/, //需要配置
-        loader: 'file-loader'
-      },
+        loader: "file-loader"
+      }
     ]
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      vue$: "vue/dist/vue.esm.js",
+      "@": resolve("src")
     },
-    extensions: ['*', '.js', '.vue', '.json']
+    extensions: ["*", ".js", ".vue", ".json"]
   },
   devServer: {
     historyApiFallback: true,
@@ -60,29 +59,55 @@ module.exports = {
     stats: {
       colors: true
     },
-    proxy: [{
-      context: ['/login', '/register', '/user/navlist', '/user/outfit', '/user/build', '/user/created',
-        '/user/getframelist', '/user/setauthority', '/user/upmission', '/captcha', '/checkname', '/getgroup',
-        '/setgroup', '/getgrouptree', '/getwating', '/getworking', '/getprogress', '/getmycensus', '/upload',
-        '/user/getuserinfo', '/user/setmyinfo', '/getusermap', '/logupload', '/user/subdaily', '/user/getmydaily'
-      ],
-      target: "http://localhost:3000",
-      changeOrigin: true,
-      secure: false
-    }]
+    proxy: [
+      {
+        context: [
+          "/login",
+          "/register",
+          "/user/navlist",
+          "/user/outfit",
+          "/user/build",
+          "/user/created",
+          "/user/getframelist",
+          "/user/setauthority",
+          "/user/upmission",
+          "/captcha",
+          "/checkname",
+          "/getgroup",
+          "/setgroup",
+          "/getgrouptree",
+          "/getwating",
+          "/getworking",
+          "/getprogress",
+          "/getmycensus",
+          "/upload",
+          "/user/getuserinfo",
+          "/user/setmyinfo",
+          "/getusermap",
+          "/logupload",
+          "/user/subdaily",
+          "/user/getmydaily",
+          "/actionlog",
+          "/findpass"
+        ],
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        secure: false
+      }
+    ]
   },
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
-}
+  devtool: "#eval-source-map"
+};
 
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
+if (process.env.NODE_ENV === "production") {
+  module.exports.devtool = "#source-map";
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
-      'process.env': {
+      "process.env": {
         NODE_ENV: '"production"'
       }
     }),
@@ -95,5 +120,5 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
-  ])
+  ]);
 }

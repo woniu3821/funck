@@ -1,17 +1,17 @@
 <template>
-<div id="index">
-<el-menu :default-active="$route.path" class="el-menu-demo" router mode="horizontal">
-  <el-menu-item v-for="(subItem,index) in childData" :index="subItem.path" :key="index">{{subItem.name}}</el-menu-item>
-</el-menu>
-<router-view></router-view>
-</div>
+  <div id="index">
+    <el-menu :default-active="$route.path" class="el-menu-demo" router mode="horizontal">
+      <el-menu-item v-for="(subItem,index) in childData" :index="subItem.path" :key="index">{{subItem.name}}</el-menu-item>
+    </el-menu>
+    <router-view></router-view>
+  </div>
 </template>
 <script>
-import { mapState } from "vuex"
-import { creatChild } from "../../util/uniTool.js"
+import { mapState } from "vuex";
+import { creatChild } from "../../util/uniTool.js";
 
 export default {
-  name:'index',
+  name: "index",
   data() {
     return {
       childData: []

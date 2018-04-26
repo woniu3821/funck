@@ -1,105 +1,55 @@
 <template>
-<div>
-  <Index></Index>
-  <el-row :gutter="30">
-    <el-col :lg="9" :xl="5">
-    <el-col class="title">增加组织</el-col>
-      <el-form :model="form" class="demo-form-inline" label-width="80px" :rules="rules"  ref="form">
-      <el-form-item label="公司" prop="company">
-        <el-select
-        v-model="form.company"
-        multiple
-        filterable
-        :multiple-limit="limit"
-        @change="changeCompany"
-        allow-create
-        default-first-option
-        placeholder="请选择或添加公司">
-        <el-option
-          v-for="item in options"
-          :key="item.cid"
-          :label="item.tags"
-          :value="item.cid">
-        </el-option>
-      </el-select>
-      </el-form-item>
-      <el-form-item label="部门" prop="groups">
-        <el-select
-        v-model="form.groups"
-        multiple
-        filterable
-        @change="changeGroups"
-        :multiple-limit="limit"
-        :disabled="disabled1"
-        allow-create
-        default-first-option
-        placeholder="请选择或添加部门">
-        <el-option
-          v-for="item in options1"
-          :key="item.cid"
-          :label="item.tags"
-          :value="item.cid">
-        </el-option>
-      </el-select>
-      </el-form-item>
-      <el-form-item label="组织" prop="organize">
-        <el-select
-        v-model="form.organize"
-        multiple
-        @change="changeOrganize"
-        filterable
-        :multiple-limit="limit"
-        :disabled="disabled2"
-        allow-create
-        default-first-option
-        placeholder="请选择或添加组织">
-        <el-option
-          v-for="item in options2"
-          :key="item.cid"
-          :label="item.tags"
-          :value="item.cid">
-        </el-option>
-      </el-select>
-      </el-form-item>
-      <el-form-item label="小组" prop="team">
-        <el-select
-        v-model="form.team"
-        multiple
-        filterable
-        :multiple-limit="limit"
-        :disabled="disabled3"
-        allow-create
-        default-first-option
-        placeholder="请选择或添加小组">
-        <el-option
-          v-for="item in options3"
-          :key="item.cid"
-          :label="item.tags"
-          :value="item.cid">
-        </el-option>
-      </el-select>
-      </el-form-item>
-      <el-col class="title">
+  <div>
+    <Index></Index>
+    <el-row :gutter="30">
+      <el-col :lg="9" :xl="5">
+        <el-col class="title">增加组织</el-col>
+        <el-form :model="form" class="demo-form-inline" label-width="80px" :rules="rules" ref="form">
+          <el-form-item label="公司" prop="company">
+            <el-select v-model="form.company" multiple filterable :multiple-limit="limit" @change="changeCompany" allow-create default-first-option placeholder="请选择或添加公司">
+              <el-option v-for="item in options" :key="item.cid" :label="item.tags" :value="item.cid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="部门" prop="groups">
+            <el-select v-model="form.groups" multiple filterable @change="changeGroups" :multiple-limit="limit" :disabled="disabled1" allow-create default-first-option placeholder="请选择或添加部门">
+              <el-option v-for="item in options1" :key="item.cid" :label="item.tags" :value="item.cid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="组织" prop="organize">
+            <el-select v-model="form.organize" multiple @change="changeOrganize" filterable :multiple-limit="limit" :disabled="disabled2" allow-create default-first-option placeholder="请选择或添加组织">
+              <el-option v-for="item in options2" :key="item.cid" :label="item.tags" :value="item.cid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="小组" prop="team">
+            <el-select v-model="form.team" multiple filterable :multiple-limit="limit" :disabled="disabled3" allow-create default-first-option placeholder="请选择或添加小组">
+              <el-option v-for="item in options3" :key="item.cid" :label="item.tags" :value="item.cid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-col class="title">
             <el-button type="primary" @click="onSubmit('form')" :loading="loading">确认添加</el-button>
             <el-button type="info" @click="resetForm('form')">清除</el-button>
+          </el-col>
+        </el-form>
       </el-col>
-      </el-form>
-    </el-col>
-    <el-col  :lg="15" :xl="19">
-      <el-col class="title">组织结构图</el-col>
-      <div id="myChart" style="min-height:420px;"></div>
-    </el-col>
-</el-row>
-</div>
+      <el-col :lg="15" :xl="19">
+        <el-col class="title">组织结构图</el-col>
+        <div id="myChart" style="min-height:420px;"></div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 <style scoped>
 .title {
   text-align: center;
   font-size: 20px;
-  margin-top:15px;
+  margin-top: 15px;
   margin-bottom: 25px;
 }
-.el-select{
+.el-select {
   width: 100%;
 }
 </style>
