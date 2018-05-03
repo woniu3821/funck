@@ -1,7 +1,9 @@
 <template>
   <div>
     <Index></Index>
-    {{msg}}
+    <div>
+      <h1 class="red">{{msg}}</h1>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -18,7 +20,7 @@ export default {
   methods: {},
   data() {
     return {
-      msg: "待开发。。。"
+      msg: "待开发,敬请期待..."
     };
   }
 };

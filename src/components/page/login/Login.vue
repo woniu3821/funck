@@ -7,12 +7,12 @@
       <el-form-item label="密码" prop="password">
         <el-input type="password" @keyup.enter.native="submitForm('loginForm')" placeholder="请输入密码" v-model="loginForm.password" auto-complete="off"></el-input>
       </el-form-item>
-      <el-row type="flex" justify="end">
+      <el-row type="flex" justify="space-between">
+        <el-checkbox v-model="checked">7天免登陆</el-checkbox>
         <router-link class="findpass" v-if="mount>2" to="/findpass">
           密码丢失？
           <span>点击找回密码</span>
         </router-link>
-        <el-checkbox v-else v-model="checked">7天免登陆</el-checkbox>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -96,22 +96,17 @@ export default {
           this.loginSys(data).then(res => {
             this.loading = false;
             if (res.data.login) {
+              this.$socket.emit("login");
               this.mount = 0;
-              this.$notify({
-                title: "成功",
-                message: res.data.message,
-                type: "success"
-              });
               this.$router.replace("/home");
             } else {
               this.$refs[formName].resetFields();
               this.mount++;
-              this.$notify({
-                title: "警告",
-                message: res.data.message,
-                type: "warning"
-              });
             }
+            this.$message({
+              message: res.data.message,
+              type: res.data.type
+            });
           });
         } else {
           return false;

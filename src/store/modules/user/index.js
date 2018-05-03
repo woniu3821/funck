@@ -10,8 +10,6 @@ const state = {
   token: "",
   // 角色分组
   role: ""
-  // 头像
-  // avatar: ''
 };
 
 const getters = {};
@@ -242,7 +240,6 @@ const actions = {
     });
   }
 };
-
 export default {
   namespaced: true,
   state,

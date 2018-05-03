@@ -2,10 +2,11 @@
 const whiteList = [
   "/login",
   "/register",
-  // 系统通知/升级
-  "/notice",
-  // 网站维护
-  "/maintenance",
+  "/error/401",
+  "/error/402",
+  "/error/403",
+  "/error/404",
+  "/error/500",
   "/findpass"
 ];
 

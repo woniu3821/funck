@@ -1,7 +1,7 @@
 <template>
   <div>
     <Index></Index>
-    <el-table class="waiting_table" :data="tableData" border tooltip-effect="light" :row-class-name="tableRowClassName">
+    <el-table v-loading="loading" class="waiting_table" :data="tableData" border tooltip-effect="light" :row-class-name="tableRowClassName">
       <el-table-column fixed prop="missionid" label="任务ID" width="80">
       </el-table-column>
       <el-table-column prop="title" label="任务名称">
@@ -19,9 +19,9 @@
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
           <el-badge value="已修改" v-if="scope.row.status===2" class="item">
-            <el-button @click.native.prevent="handleClick(scope.row,scope.$index,tableData)" :loading="loading" plain="" type="infor" size="small">接受</el-button>
+            <el-button @click.native.prevent="handleClick(scope.row,scope.$index,tableData)" plain="" type="infor" size="small">接受</el-button>
           </el-badge>
-          <el-button v-else @click.native.prevent="handleClick(scope.row,scope.$index,tableData)" :loading="loading" type="success" size="small">接受</el-button>
+          <el-button v-else @click.native.prevent="handleClick(scope.row,scope.$index,tableData)" type="success" size="small">接受</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -91,10 +91,11 @@ export default {
     ...mapActions(["getWating"])
   },
   mounted() {
+    this.loading = true;
     this.getWating().then(res => {
+      this.loading = false;
       if (res.success) {
         this.tableData = res.data;
-        // this.sendCount();
       }
     });
   }

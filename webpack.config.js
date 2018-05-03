@@ -3,7 +3,8 @@ var webpack = require("webpack");
 var proxy = require("http-proxy-middleware");
 
 function resolve(dir) {
-  return path.join(__dirname, "..", dir);
+  console.log(path.join(__dirname, "../", dir));
+  return path.join(__dirname, "../", dir);
 }
 module.exports = {
   entry: "./src/main.js",
@@ -88,7 +89,8 @@ module.exports = {
           "/user/subdaily",
           "/user/getmydaily",
           "/actionlog",
-          "/findpass"
+          "/findpass",
+          "/socket"
         ],
         target: "http://localhost:3000",
         changeOrigin: true,

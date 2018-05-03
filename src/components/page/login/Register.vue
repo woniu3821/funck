@@ -185,7 +185,7 @@ export default {
           let data = {
             name: this.form.name,
             password: this.form.pass,
-            groups: this.form.groups[this.form.groups.length - 1]
+            groups: this.form.groups
           };
           this.loading = true;
           this.addAcount(data)
@@ -206,7 +206,7 @@ export default {
                       name: this.form.name
                     }
                   });
-                  // this.$refs[formName].resetFields();
+                  this.$refs[formName].resetFields();
                 }, 2000);
               }
             })

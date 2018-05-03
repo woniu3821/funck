@@ -2,23 +2,46 @@
   <div id="layout">
     <el-container>
       <el-header>
-        <el-menu menu-trigger="click" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-          <el-submenu index="0" popper-class="submenu">
-            <template slot="title">
-              <i v-if="show" class="iconfont icon-head1 head"></i>
-              <img v-else class="headerbox" :src="src" />
-              <span slot="title">{{name}}</span>
-            </template>
-            <el-menu-item index="1">
-              <i class="el-icon-edit"></i>用户设置</el-menu-item>
-            <el-menu-item index="2">
-              <i class="el-icon-delete"></i>退出登陆</el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-info"></i>返回首页</el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-refresh"></i>刷新当前页</el-menu-item>
-          </el-submenu>
-        </el-menu>
+        <el-row>
+          <el-col :xs="12" :sm="7" :md="8" :lg="9">
+            <el-menu menu-trigger="hover" class="el-menu-header-left" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+              <el-submenu index="1" popper-class="submenu">
+                <template slot="title">
+                  <i v-if="show" class="iconfont icon-head1 head"></i>
+                  <img v-else class="headerbox" :src="src" />
+                  <span slot="title">{{name}}</span>
+                </template>
+                <el-menu-item index="1-1">
+                  <i class="el-icon-edit"></i>用户设置</el-menu-item>
+                <el-menu-item index="1-2">
+                  <i class="el-icon-delete"></i>退出登陆</el-menu-item>
+                <el-menu-item index="1-3">
+                  <i class="el-icon-info"></i>返回首页</el-menu-item>
+                <el-menu-item index="1-4">
+                  <i class="el-icon-refresh"></i>刷新当前页</el-menu-item>
+              </el-submenu>
+            </el-menu>
+          </el-col>
+          <el-col class="hidden-xs-only" :sm="10" :md="8" :lg="6">
+            <span class="header_title">BLOGSCN-工作管理系统</span>
+          </el-col>
+          <el-col :xs="{span: 6, offset: 6}" :sm="{span: 4, offset: 3}" :md="{span: 4, offset: 4}" :lg="{span: 3, offset: 6}">
+            <el-menu menu-trigger="hover" class="el-menu-header-right" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" mode="horizontal" @select="handleSelect">
+              <el-submenu index="2">
+                <template slot="title">
+                  <el-badge class="dot-item" :is-dot="dot.wait||dot.work? true : false"> 消息中心
+                  </el-badge>
+                </template>
+                <el-menu-item index="2-1">
+                  待接收任务：{{dot.wait}}
+                </el-menu-item>
+                <el-menu-item index="2-2">
+                  待完成任务：{{dot.work}}
+                </el-menu-item>
+              </el-submenu>
+            </el-menu>
+          </el-col>
+        </el-row>
       </el-header>
       <el-container>
         <Aside></Aside>
@@ -33,6 +56,18 @@
   width: 30px;
   border-radius: 50%;
   margin-right: 3px;
+}
+.item {
+  margin-top: 10px;
+}
+.dot-item .el-badge__content.is-fixed {
+  top: 15px;
+}
+.header_title {
+  color: #d3dde6;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 3px;
 }
 .head {
   font-size: 35px;
@@ -49,8 +84,9 @@
 </style>
 <script>
 import Aside from "./Aside";
+import localStorage from "../../util/localstorage";
 import Mian from "./Main";
-import { mapActions } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   name: "layout",
   components: {
@@ -73,22 +109,34 @@ export default {
       this.name = res.name;
     });
   },
+  computed: {
+    ...mapState({}),
+    ...mapGetters({
+      dot: "socket/showDot"
+    })
+  },
   methods: {
     handleSelect(index) {
       switch (index) {
-        case "1":
+        case "1-1":
           this.$router.replace("/admin");
           break;
-        case "2":
+        case "1-2":
           this.userlogout().then(_ => {
             this.$router.replace("/login");
           });
           break;
-        case "3":
+        case "1-3":
           this.$router.replace("/home");
           break;
-        case "4":
+        case "1-4":
           this.$router.go(0);
+          break;
+        case "2-1":
+          this.$router.replace("/waiting");
+          break;
+        case "2-2":
+          this.$router.replace("/working");
           break;
       }
     },

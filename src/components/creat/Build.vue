@@ -84,6 +84,9 @@ export default {
         desc: "",
         id: ""
       },
+      change: false,
+      oldpeople: [],
+      newpeople: [],
       filterText: "",
       defaultProps: {
         children: "children",
@@ -126,6 +129,7 @@ export default {
     this.options = this.getOutfit;
     let fromData = this.$route.params.dataObj; //路由传参传回修改任务的数据
     if (fromData) {
+      this.change = true;
       fromData.date1 = new Date(fromData.date1); //后台传回的参数要处理一下
       this.buildForm = fromData;
       this.setCheckedKeys(fromData.peoples);
@@ -134,6 +138,17 @@ export default {
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val);
+    },
+    "buildForm.peoples"(val, old) {
+      let _this = this;
+      if (this.oldpeople == "") this.buildForm.peoples = this.oldpeople = val;
+      if (this.change) {
+        this.newpeople = val.filter(function(item1) {
+          return _this.oldpeople.every(function(item2) {
+            return item2 !== item1;
+          });
+        });
+      }
     }
   },
   methods: {
@@ -148,12 +163,25 @@ export default {
             detail: this.buildForm.desc,
             id: this.buildForm.id
           };
+
           this.buildSubmit(data)
             .then(res => {
               this.loading = false;
               switch (res.type) {
                 case "success":
+                  let oldpeople = this.oldpeople.length
+                    ? this.oldpeople
+                    : data.peoples;
+                  this.$socket.emit("build_mission", {
+                    old: oldpeople,
+                    new: this.newpeople,
+                    change: this.change
+                  });
+
                   this.resetForm(formName);
+                  this.change = false;
+                  this.oldpeople = [];
+                  this.newpeople = [];
                   break;
                 default:
                   break;

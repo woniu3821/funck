@@ -1,7 +1,7 @@
 <template>
   <div id="working">
     <Index></Index>
-    <el-table :loading="loading" :data="tableData.length?tableData.slice((currentPage-1)*pagesize,currentPage*pagesize):[]" style="width:100%;">
+    <el-table v-loading="loading" :data="tableData.length?tableData.slice((currentPage-1)*pagesize,currentPage*pagesize):[]" style="width:100%;">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
@@ -129,10 +129,11 @@ export default {
     ...mapActions(["getWorking"])
   },
   mounted() {
+    this.loading = true;
     this.getWorking().then(res => {
+      this.loading = false;
       if (res.success) {
         this.tableData = res.data;
-        // this.sendCount();
       }
     });
   }

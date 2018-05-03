@@ -1,20 +1,24 @@
 <template>
   <div>
     <Index></Index>
-    <h1>
-      {{text}}
-    </h1>
+    <div>
+      <h1 class="red">{{msg}}</h1>
+    </div>
   </div>
 </template>
+<style scoped>
+
+</style>
 <script>
 import Index from "./index";
 export default {
   components: {
     Index
   },
+  methods: {},
   data() {
     return {
-      text: "统计工作日志"
+      msg: "待开发,敬请期待..."
     };
   }
 };

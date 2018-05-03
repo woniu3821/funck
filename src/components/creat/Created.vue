@@ -1,7 +1,7 @@
 <template>
   <div>
     <Index></Index>
-    <el-table class="created_table" :data="getCreated.length?getCreated.slice((currentPage-1)*pagesize,currentPage*pagesize):[]" style="width: 100%">
+    <el-table class="created_table" ref="totalTable" :data="tableData.length? tableData.slice((currentPage - 1) * pagesize,currentPage * pagesize):[]" style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
@@ -30,12 +30,12 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="success" @click.native.prevent="checkMission(scope.row)" :loading="loading" size="small">进度</el-button>
+          <el-button type="success" @click.native.prevent="checkMission(scope.row,scope.$index)" :loading="loading" size="small">进度</el-button>
           <el-button @click="updateMission(scope.row)" size="small">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-row type="flex" justify="center">
+    <el-row type="flex" justify="center" v-if="tableData.length">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[5,10,15,20]" :page-size="pagesize" prev-text="上一页" next-text="下一页" layout="sizes, prev, pager, next" :total="getCreated.length">
       </el-pagination>
     </el-row>
@@ -55,12 +55,11 @@
         <el-table-column label="完成时间" prop="complatetime" :formatter="complateFormat">
         </el-table-column>
         <el-table-column width="160" label="动态">
-
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="deleteMission">取消任务</el-button>
-        <el-button @click="doneMission" type="primary">确认完成</el-button>
+        <el-button type="danger" :loading="footer_loading" @click="deleteMission(missionID,index)">删除任务</el-button>
+        <el-button :loading="footer_loading" @click="doneMission(missionID,index)" type="primary">确认完成</el-button>
       </span>
     </el-dialog>
   </div>
@@ -90,13 +89,22 @@ export default {
   },
   data() {
     return {
+      tableData: [],
       currentPage: 1,
       pagesize: 5,
       dialogVisible: false,
       loading: false,
-      tableData2: []
+      tableData2: [],
+      footer_loading: false,
+      status: 0,
+      missionID: null,
+      index: null
     };
   },
+  mounted() {
+    this.tableData = this.getCreated.length ? this.getCreated : [];
+  },
+  watch: {},
   methods: {
     updateMission(row) {
       this.toUpdateMission(row.ID)
@@ -125,8 +133,11 @@ export default {
         return "未完成";
       }
     },
-    checkMission(row) {
+
+    checkMission(row, index) {
       this.loading = true;
+      this.missionID = row.ID;
+      this.index = index;
       this.getProgress({ id: row.ID, peoples: row.peoples }).then(res => {
         this.loading = false;
         if (!res.success) {
@@ -136,8 +147,20 @@ export default {
       });
     },
 
-    deleteMission() {},
-    doneMission() {},
+    deleteMission(id, index) {
+      this.handleMission(id, 2, index);
+    },
+    doneMission(id, index) {
+      this.handleMission(id, 1, index);
+    },
+    handleMission(id, status, index) {
+      this.tableData.splice(index, 1);
+      this.footer_loading = true;
+      this.getProgress({ id: id, status: status }).then(_ => {
+        this.footer_loading = false;
+        this.dialogVisible = false;
+      });
+    },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
     },
@@ -154,13 +177,11 @@ export default {
         o: 0
       };
       let data = this.tableData2;
-      console.log(data);
       if (Array.isArray(data) && data.length) {
         for (let { status, intime } of data) {
           if (intime === 2) tableStatus.o++;
           if (intime === 0) tableStatus.w++;
           if (intime === 1) tableStatus.c++;
-          console.log(tableStatus);
         }
       }
       return tableStatus;

@@ -1,4 +1,5 @@
 import axios from "../util/ajax";
+import localStorage from "../util/localstorage";
 import State from "./modules/user";
 import * as types from "./types";
 import Cookies from "js-cookie";
@@ -150,8 +151,9 @@ const actions = {
         });
     });
   },
-  getWating({ commit }, id) {
+  getWating({ commit, dispatch }, id) {
     //获取未接受任务
+    if (id) commit("socket/reduce_wait");
     let uid = State.state.uid;
     return new Promise((resolve, reject) => {
       axios({
@@ -164,9 +166,6 @@ const actions = {
       })
         .then(res => {
           if (res.status == 200) {
-            if (res.data.success) {
-              commit(types.INFOMSG, res.data);
-            }
             resolve(res.data);
           } else {
             reject(err);
@@ -178,15 +177,13 @@ const actions = {
         });
     });
   },
-  getWorking({ commit }, data) {
+  getWorking({ commit, dispatch }, data) {
+    if (data) commit("socket/reduce_work");
     let uid = State.state.uid;
     return new Promise((resolve, reject) => {
       axios({ url: "/getworking", method: "post", data: { uid, ...data } })
         .then(res => {
           if (res.status == 200) {
-            if (res.data.success) {
-              commit(types.INFOMSG, res.data);
-            }
             resolve(res.data);
           } else {
             reject(err);
