@@ -61,3 +61,20 @@ QQ : 643556567
 
 Emial: cuimmcan@qq.com
 ```
+
+### 部分页面截图
+
+> 登陆界面
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/1.png)
+> 注册界面
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/2.png)
+> 首页
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/3.png)
+> 任务统计
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/4.png)
+> 任务创建页面
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/5.png)
+> 权限管理页面
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/6.png)
+> 工作日志页面
+> ![界面截图](https://raw.githubusercontent.com/woniu3821/githubug/master/shoot/7.png)
