@@ -139,7 +139,7 @@ export default {
         groups: [
           {
             type: "array",
-            required: true,
+            required: false,
             message: "请选择你所属的组织",
             trigger: "change"
           }
@@ -185,7 +185,7 @@ export default {
           let data = {
             name: this.form.name,
             password: this.form.pass,
-            groups: this.form.groups
+            groups: this.form.groups.slice(-1)
           };
           this.loading = true;
           this.addAcount(data)

@@ -1,9 +1,17 @@
-import { Loading, Message, MessageBox, Notification } from "element-ui";
+import {
+  Loading,
+  Message,
+  MessageBox,
+  Notification
+} from "element-ui";
 import localStorage from "../../../util/localstorage";
 const state = {
   connect: "",
   info: "",
-  oMission: {}
+  oMission: {
+    work: 0,
+    wait: 0
+  }
 };
 const getters = {
   showDot: (state, getters, rootState) => {
@@ -24,7 +32,9 @@ const mutations = {
     state.oMission = value[0];
   },
   SOCKET_WELCOME(state, value) {
-    Message({ message: `欢迎 ${value} 同事加入！` });
+    Message({
+      message: `欢迎 ${value} 同事加入！`
+    });
   },
   SOCKET_MISSION_MESSAGE(state, value) {
     Notification({
@@ -32,7 +42,7 @@ const mutations = {
       type: "success",
       title: "新任务通知"
     });
-    state.wait++;
+    state.oMission.wait++;
   },
   SOCKET_CHANGE_MESSAGE() {
     Notification({
@@ -73,9 +83,18 @@ const mutations = {
   }
 };
 const actions = {
-  socket_connect({ commit, state }) {},
-  socket_changeMessage({ commit, state }) {},
-  socket_login({ commit, state }, data) {}
+  socket_connect({
+    commit,
+    state
+  }) {},
+  socket_changeMessage({
+    commit,
+    state
+  }) {},
+  socket_login({
+    commit,
+    state
+  }, data) {}
 };
 export default {
   namespaced: true,

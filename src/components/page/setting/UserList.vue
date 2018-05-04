@@ -1,7 +1,7 @@
 <template>
   <div>
     <Index></Index>
-    <el-row :gutter="30">
+    <el-row :gutter="30" type="flex" justify="space-around">
       <el-col :span="6">
         <el-button type="success" class="peoples">月新增用户：{{now}}</el-button>
       </el-col>
@@ -10,9 +10,6 @@
       </el-col>
       <el-col :span="6">
         <el-button type="warning" class="peoples">同比增长(月)：{{now-old}}</el-button>
-      </el-col>
-      <el-col :span="6">
-        <el-button type="infor" class="peoples">总用户数：80000</el-button>
       </el-col>
     </el-row>
     <el-row>

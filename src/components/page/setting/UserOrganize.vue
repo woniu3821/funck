@@ -199,7 +199,7 @@ export default {
     }),
     drawLine(res) {
       let data = {
-        name: "新生集团",
+        name: "公司",
         children: res
       };
       // 基于准备好的dom，初始化echarts实例
