@@ -57,8 +57,6 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 > 本人很喜欢挑战，喜欢那种拨云见日的快感。后面还会按照自己的想法开发个移动商城，在开发个个人博客。我还是个菜鸟，需要学习的还有很多，现在坚持每天打代码。希望我多年以后还可以一直打代码。能看到自己成长的痕迹。如果有志同道合的伙伴欢迎加我 qq 或者邮件交流讨论。
 
 ```bash
-来个黑的代码块吧
-
 QQ : 643556567
 
 Emial: cuimmcan@qq.com
