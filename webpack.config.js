@@ -14,8 +14,7 @@ module.exports = {
     filename: "build.js"
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.css$/,
         use: ["vue-style-loader", "css-loader"]
       },
@@ -60,43 +59,41 @@ module.exports = {
     stats: {
       colors: true
     },
-    proxy: [
-      {
-        context: [
-          "/login",
-          "/register",
-          "/user/navlist",
-          "/user/outfit",
-          "/user/build",
-          "/user/created",
-          "/user/getframelist",
-          "/user/setauthority",
-          "/user/upmission",
-          "/captcha",
-          "/checkname",
-          "/getgroup",
-          "/setgroup",
-          "/getgrouptree",
-          "/getwating",
-          "/getworking",
-          "/getprogress",
-          "/getmycensus",
-          "/upload",
-          "/user/getuserinfo",
-          "/user/setmyinfo",
-          "/getusermap",
-          "/logupload",
-          "/user/subdaily",
-          "/user/getmydaily",
-          "/actionlog",
-          "/findpass",
-          "/socket"
-        ],
-        target: "http://localhost:3000",
-        changeOrigin: true,
-        secure: false
-      }
-    ]
+    proxy: [{
+      context: [
+        "/login",
+        "/register",
+        "/user/navlist",
+        "/user/outfit",
+        "/user/build",
+        "/user/created",
+        "/user/getframelist",
+        "/user/setauthority",
+        "/user/upmission",
+        "/captcha",
+        "/checkname",
+        "/getgroup",
+        "/setgroup",
+        "/getgrouptree",
+        "/getwating",
+        "/getworking",
+        "/getprogress",
+        "/getmycensus",
+        "/upload",
+        "/user/getuserinfo",
+        "/user/setmyinfo",
+        "/getusermap",
+        "/logupload",
+        "/user/subdaily",
+        "/user/getmydaily",
+        "/actionlog",
+        "/findpass",
+        "/socket"
+      ],
+      target: "http://localhost:3000",
+      changeOrigin: true,
+      secure: false
+    }]
   },
   performance: {
     hints: false
@@ -114,7 +111,7 @@ if (process.env.NODE_ENV === "production") {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
+      sourceMap: false,
       compress: {
         warnings: false
       }
